@@ -36,3 +36,11 @@ export enum stationId {
     Olorunsogo2 = 'olorunsogo2',
     OlorunsogoLines = 'olorunsogoLines'
 }
+
+export enum settings {
+    LoadDrop = 'load-drop',
+    SampleSize = 'sample-size',
+    LoadDropOption = 'load-drop-option',
+    AveragePower = 'average-power',
+    DeclaredPower = 'declared-power'
+}

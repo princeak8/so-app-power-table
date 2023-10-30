@@ -3,46 +3,65 @@ import { defineStore } from 'pinia'
 
 import { type dataType, type sectionType, type stationType, type powerDropType } from "@/types/index";
 import { initializeStation, currentTime, checkPowerDrop, getPower, getMvar, getVoltage } from '@/helper';
-import { stationId } from '@/enums';
+import { stationId, settings } from '@/enums';
 import { values, getAverage } from '@/utilities';
+import { inStorage, storage } from '@/localStorage';
 
-export const afamIVStore = defineStore('afamIV', () => {
+const storeId = 'afamIV';
+
+export const afamIVStore = defineStore(storeId, () => {
   const afamIV = ref(initializeStation(stationId.AfamIV));
 
-  const connected = ref(false);
-  const connectionLost = ref(false);
-  const lastConnectedTime = ref(); 
+  const { VITE_POWER_SAMPLE_SIZE } = import.meta.env;
 
-  const mw = ref();
-  const mx = ref();
-  const kv = ref();
-  // sample of power values pushed into an array to be used to get the average value for the purpose of calculating power drop
-  const powerSampleArr = ref<string[]>([]);
-  const powerTarget = ref(0);
-  const powerDrop = ref<powerDropType>({
-    drop: 0, status: false
-  })
+    const connected = ref(false);
+    const connectionLost = ref(false);
+    const lastConnectedTime = ref(); 
+
+    const mw = ref();
+    const mx = ref();
+    const kv = ref();
+
+    const powerSampleArr = ref<string[]>([]);
+    const powerTarget = ref(0);
+
+    const powerDrop = ref<powerDropType>({
+        drop: 0, status: false
+    })
+
+    watch(() => powerSampleArr.value.length, () => {
+        let arr = powerSampleArr.value;
+        let SampleSize = (inStorage(settings.SampleSize)) ? storage(settings.SampleSize) : VITE_POWER_SAMPLE_SIZE;
+        // console.log('sample array:', arr.length);
+        if(arr.length >= SampleSize) {
+            powerTarget.value = getAverage(arr);
+            powerSampleArr.value = [];
+        }
+    })
 
     function set (data: stationType) {
         afamIV.value = {...data};
         mw.value = getPower(data.sections, true);
         mx.value = getMvar(data.sections, true);
         kv.value = getVoltage(data.sections);
-        powerSampleArr.value.push(mw.value);
-        
+
+        let loadDropOption = localStorage.getItem(settings.LoadDropOption);
+        let declaredPower = localStorage.getItem(storeId);
+
+        // console.log(`${loadDropOption} && ${loadDropOption}==${settings.DeclaredPower} && ${declaredPower}`);
+        if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
+            powerTarget.value = parseFloat(declaredPower);
+        }else{
+            powerSampleArr.value.push(mw.value.pwr);
+        }
         // checking for sudden power drop below the threshold
-        let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr));
+        let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), storeId);
+        // console.log('power drop target:', powerTarget.value);
         if(drop) powerDrop.value = drop;
+        
         connect();
         lastConnectedTime.value = Math.round(new Date().getTime() / 1000);
     }
-
-    watch(powerSampleArr, (arr) => {
-        if(arr.length >= import.meta.env.VITE_POWER_SAMPLE_SIZE) {
-            powerTarget.value = getAverage(arr);
-            powerSampleArr.value = [];
-        }
-    })
 
     function disconnected () {
         connected.value = false;
@@ -51,24 +70,18 @@ export const afamIVStore = defineStore('afamIV', () => {
 
     function connect () {
         connected.value = true;
-        // console.log('connected', connected.value);
     }
 
+    //Checks that the last time since the station's value was updated has not exceeded the max update time
     function checkConnection () {
-        // console.log('lastConnected:', lastConnectedTime.value+ ' current time:', currentTime.value);
-        // console.log('time since last connection:', timeSinceLastConnection.value + 'Secs; '+currentTime.value+' - '+lastConnectedTime.value);
-        if(timeSinceLastConnection.value && timeSinceLastConnection.value >= 60) {
+        if(timeSinceLastConnection.value && timeSinceLastConnection.value >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) {
             disconnected();
         }
     }
 
     function acknowledgePowerDrop () {
         powerDrop.value = {drop: 0, status: false};
-        // console.log('drop acknowledged');
     }
-
-    // lastConnected: 1695654091 current time: 1695654089
-    // time since last connection: -2 1695654089 - 1695654091
 
     const station = computed(() => afamIV.value)
     const isConnected = computed(() => connected.value);
@@ -80,7 +93,7 @@ export const afamIVStore = defineStore('afamIV', () => {
     })
 
   return { 
-          station, isConnected, isConnectionLost, lastConnected, powerDrop, vals,
-          set, disconnected, connect, checkConnection, acknowledgePowerDrop 
+            station, isConnected, isConnectionLost, lastConnected, powerDrop, vals,
+            set, disconnected, connect, checkConnection, acknowledgePowerDrop 
         }
 })

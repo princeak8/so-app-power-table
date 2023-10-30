@@ -1,9 +1,18 @@
 @import './base.css';
 
+.content-container {
+  display:flex; 
+  flex-direction: column; 
+  width: 90%; 
+  border: thin solid #fff; 
+  margin-left: auto; 
+  margin-right: auto;
+}
+
 #app {
   /* max-width: 1280px; */
-  margin: 0 auto;
-  padding: 2rem;
+  /* margin: 0 auto; */
+  padding: 1rem;
 
   font-weight: normal;
 }
@@ -20,19 +29,47 @@ a,
 }
 
 .connected {
-    color: green;
+    color: green !important;
 }
 
 .connectionLost {
-    color: red;
+    color: red !important;
 }
 
 .NotConnected {
-  color: yellow;
+  color: yellow !important;
 }
 
 .redBg {
-    background-color: red;
+    background-color: red !important;
+}
+
+.bg-blue1 {
+  background-color: #3B71CA;
+}
+
+.bg-green {
+  background-color: #14A44D;
+}
+
+.bg-yellow {
+  background-color: #E4A11B;
+}
+
+.button {
+  border-radius: 0.5em;
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+.liftBtn {
+  color: #FFF;
+  padding-right: 1em;
+  padding-right: 1em;
+}
+
+.red {
+  color: red !important;
 }
 
 @media (hover: hover) {
@@ -48,8 +85,8 @@ a,
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; */
+    /* padding: 0 2rem; */
   }
 }

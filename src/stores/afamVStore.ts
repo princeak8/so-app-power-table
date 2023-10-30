@@ -3,11 +3,16 @@ import { defineStore } from 'pinia'
 
 import { type dataType, type sectionType, type stationType, type powerDropType } from "@/types/index";
 import { initializeStation, currentTime, checkPowerDrop, getPower, getMvar, getVoltage } from '@/helper';
-import { stationId } from '@/enums';
+import { stationId, settings } from '@/enums';
 import { values, getAverage } from '@/utilities';
+import { inStorage, storage } from '@/localStorage';
 
-export const afamVStore = defineStore('afamV', () => {
+const storeId = 'afamV';
+
+export const afamVStore = defineStore(storeId, () => {
     const afamV = ref(initializeStation(stationId.AfamV));
+
+    const { VITE_POWER_SAMPLE_SIZE } = import.meta.env;
 
     const connected = ref(false);
     const connectionLost = ref(false);
@@ -24,8 +29,11 @@ export const afamVStore = defineStore('afamV', () => {
         drop: 0, status: false
     })
 
-    watch(powerSampleArr, (arr) => {
-        if(arr.length >= import.meta.env.VITE_POWER_SAMPLE_SIZE) {
+    watch(() => powerSampleArr.value.length, () => {
+        let arr = powerSampleArr.value;
+        let SampleSize = (inStorage(settings.SampleSize)) ? storage(settings.SampleSize) : VITE_POWER_SAMPLE_SIZE;
+        // console.log('sample array:', arr.length);
+        if(arr.length >= SampleSize) {
             powerTarget.value = getAverage(arr);
             powerSampleArr.value = [];
         }
@@ -37,10 +45,20 @@ export const afamVStore = defineStore('afamV', () => {
         mx.value = getMvar(data.sections, true);
         kv.value = getVoltage(data.sections);
 
-        // checking for sudden power drop below the threshold
-        let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr));
-        if(drop) powerDrop.value = drop;
+        let loadDropOption = localStorage.getItem(settings.LoadDropOption);
+        let declaredPower = localStorage.getItem(storeId);
 
+        // console.log(`${loadDropOption} && ${loadDropOption}==${settings.DeclaredPower} && ${declaredPower}`);
+        if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
+            powerTarget.value = parseFloat(declaredPower);
+        }else{
+            powerSampleArr.value.push(mw.value.pwr);
+        }
+        // checking for sudden power drop below the threshold
+        let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), storeId);
+        // console.log('power drop target:', powerTarget.value);
+        if(drop) powerDrop.value = drop;
+        
         connect();
         lastConnectedTime.value = Math.round(new Date().getTime() / 1000);
     }
@@ -54,6 +72,7 @@ export const afamVStore = defineStore('afamV', () => {
         connected.value = true;
     }
 
+    //Checks that the last time since the station's value was updated has not exceeded the max update time
     function checkConnection () {
         if(timeSinceLastConnection.value && timeSinceLastConnection.value >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) {
             disconnected();

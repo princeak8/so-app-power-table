@@ -3,11 +3,14 @@ import { defineStore } from 'pinia'
 
 import { type dataType, type sectionType, type stationType, type powerDropType } from "@/types/index";
 import { initializeStation, currentTime, checkPowerDrop, getPower, getMvar, getVoltage } from '@/helper';
-import { stationId } from '@/enums';
-import { values, getAverage } from '@/utilities';
 import { olorunsogoStore } from './olorunsogoStore';
+import { stationId, settings } from '@/enums';
+import { values, getAverage } from '@/utilities';
+import { inStorage, storage } from '@/localStorage';
 
-export const olorunsogoNippStore = defineStore('olorunsogoNipp', () => {
+const storeId = 'olorunsogoNipp';
+
+export const olorunsogoNippStore = defineStore(storeId, () => {
     const stationStore = ref(initializeStation('olorunsogoNipp'));
     const olorunsogoGasStore = olorunsogoStore();
 
@@ -91,6 +94,22 @@ export const olorunsogoNippStore = defineStore('olorunsogoNipp', () => {
 
         return values(power, mvar, kv.value);
     })
+
+    watch(() => vals.value, (val) => {
+        // checking for sudden power drop below the threshold
+        let loadDropOption = localStorage.getItem(settings.LoadDropOption);
+        let declaredPower = localStorage.getItem(storeId);
+
+        if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
+            powerTarget.value = parseFloat(declaredPower);
+        }else{
+            powerSampleArr.value.push(val.mw);
+        }
+        // checking for sudden power drop below the threshold
+        let drop = checkPowerDrop(powerTarget.value, parseFloat(val.mw), storeId);
+        if(drop) powerDrop.value = drop;
+    })
+
     const timeSinceLastConnection = computed(() => {
         return (lastConnectedTime.value != undefined) ? Math.abs((currentTime() - lastConnectedTime.value)) : false;
     })

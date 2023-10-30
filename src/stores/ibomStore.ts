@@ -2,15 +2,19 @@ import { ref, computed, watch } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 
 import { type dataType, type sectionType, type stationType, type powerDropType, type singleStoreValsType } from "@/types/index";
-import { initializeStation, currentTime, checkPowerDrop, getPower, getMvar, getVoltage } from '@/helper';
-import { stationId } from '@/enums';
-import { values, getAverage } from '@/utilities';
+import { initializeStation, currentTime, checkPowerDrop, getPower, getMvar, getVoltage, mergeVals } from '@/helper';
 import { useEketStore } from './useEketStore';
 import { useEkimStore } from './useEkimStore';
-import { mergeVals } from '@/helper';
+import { stationId, settings } from '@/enums';
+import { values, getAverage } from '@/utilities';
+import { inStorage, storage } from '@/localStorage';
 
-export const ibomStore = defineStore('ibom', () => {
+const storeId = 'ibom';
+
+export const ibomStore = defineStore(storeId, () => {
     const stationStore = ref(initializeStation('ibom'));
+
+    const { VITE_POWER_SAMPLE_SIZE } = import.meta.env;
 
     const eketStore = useEketStore();
     const ekimStore = useEkimStore();
@@ -25,8 +29,10 @@ export const ibomStore = defineStore('ibom', () => {
         drop: 0, status: false
     })
 
-    watch(powerSampleArr, (arr) => {
-        if(arr.length >= import.meta.env.VITE_POWER_SAMPLE_SIZE) {
+    watch(() => powerSampleArr.value.length, () => {
+        let arr = powerSampleArr.value;
+        let SampleSize = (inStorage(settings.SampleSize)) ? storage(settings.SampleSize) : VITE_POWER_SAMPLE_SIZE;
+        if(arr.length >= SampleSize) {
             powerTarget.value = getAverage(arr);
             powerSampleArr.value = [];
         }
@@ -59,11 +65,12 @@ export const ibomStore = defineStore('ibom', () => {
     // track that eket and ekim are connected
     const stationsConnected = computed(() => {
         let status = (eketIsConnected.value || ekimIsconnected.value) ? true : false;
-        console.log('ibom connection status:', status);
+        // console.log('ibom connection status:', status);
         connected.value = status;
         return status;
     })
 
+    //DO NOT DELETE THIS WATCH
     watch(stationsConnected, (prev, next) => {
         // this watch only serves to trigger stationsConnected which in turn sets the connected value
         // console.log('connection status prev', prev);
@@ -97,6 +104,23 @@ export const ibomStore = defineStore('ibom', () => {
         let {power, mvar, voltage} = mergedVals.value;
         return values(power, mvar, voltage);
     });
+
+    watch(() => vals.value, (val) => {
+        // console.log('watching ibom vals', val)
+        // checking for sudden power drop below the threshold
+        let loadDropOption = localStorage.getItem(settings.LoadDropOption);
+        let declaredPower = localStorage.getItem(storeId);
+
+        if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
+            powerTarget.value = parseFloat(declaredPower);
+        }else{
+            powerSampleArr.value.push(val.mw);
+        }
+
+        // checking for sudden power drop below the threshold
+        let drop = checkPowerDrop(powerTarget.value, parseFloat(val.mw), storeId);
+        if(drop) powerDrop.value = drop;
+    })
     const timeSinceLastConnection = computed(() => {
         return (lastConnected.value != undefined) ? Math.abs((currentTime() - lastConnected.value)) : false;
     })

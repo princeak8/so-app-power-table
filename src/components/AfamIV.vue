@@ -6,9 +6,21 @@
     <td class="center"> {{ vals.mx}} </td>
     <td class="center"> {{ vals.kv }} </td>
     <td class="center" :class="connectionStatusColor"> {{(isConnected) ? 'Connected' : (isConnectionLost) ? 'Connection Lost' : 'Not Connected'}} </td>
-    <td v-if="powerDrop.status">
-        <button type="button" @click="acknowledgeDrop()">Acknowledge</button>
+    <td class="center">
+      <span v-if="!edit" @click="editDeclaredPower">{{ declaredPower || '-' }}</span>
+      <input v-if="edit" type="text" class="form-control" v-model="declaredPower" @blur="saveDeclaredPower" />
     </td>
+    <!-- <td v-if="powerDrop.status">
+        <button type="button" @click="acknowledgeDrop()" class="button bg-green">Acknowledge</button>
+        <button type="button" @click="ignorePowerDrop()" class="button bg-yellow">Ignore</button>
+    </td>
+    <td v-if="powerDropIgnored">
+      Ignored
+      <button type="button" @click="liftIgnore()" class="bg-blue1 button liftBtn">LIFT</button>
+    </td> -->
+    <StationPowerDropCols  :powerDropIgnored="powerDropIgnored" :powerDrop="powerDrop" 
+                  @emitAcknowledgeDrop="acknowledgeDrop" @emitIgnorePowerDrop="ignorePowerDrop" @emitLiftIgnore="liftIgnore"
+    />
   </tr>
 </template>
 
@@ -17,10 +29,16 @@
 import { ref, computed, watch } from 'vue';
 import { storeToRefs } from 'pinia'
 import { afamIVStore } from "@/stores/afamIVStore"
-import { values } from '@/utilities';
+import { inStorage, storage } from '@/localStorage';
+import { ignore, lift } from '@/helper';
+import StationPowerDropCols from './inc/StationPowerDropCols.vue'
 
     const stationStore = afamIVStore();
+    const storeId = stationStore.$id;
     const { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals } = storeToRefs(stationStore)
+    const declaredPower = ref(localStorage.getItem(storeId));
+    const edit = ref(false);
+    const powerDropIgnored = ref(inStorage('ignore-'+storeId) && storage('ignore-'+storeId) == '1')
 
     const props = defineProps({
         sn: Number,
@@ -35,13 +53,33 @@ import { values } from '@/utilities';
       return (isConnected.value) ? 'connected' : (isConnectionLost.value) ? 'connectionLost' : 'notConnected'
     })
 
+    watch(vals, (currentVals) => {
+      if(currentVals.mw != '' && currentVals.mw != '-') emits('emitTotal', station.value.id, currentVals.mw)
+    })
+
     const acknowledgeDrop = () => {
         stationStore.acknowledgePowerDrop();
     }
 
-    watch(vals, (currentVals) => {
-      if(currentVals.mw != '' && currentVals.mw != '-') emits('emitTotal', station.value.id, currentVals.mw)
-    })
+    const ignorePowerDrop = () => {
+      acknowledgeDrop();
+      ignore(storeId);
+      powerDropIgnored.value = (inStorage('ignore-'+storeId) && storage('ignore-'+storeId) == '1');
+    }
+
+    const liftIgnore = () => {
+      lift(storeId);
+      powerDropIgnored.value = (inStorage('ignore-'+storeId) && storage('ignore-'+storeId) == '1');
+    }
+
+    const editDeclaredPower = () => {
+      edit.value = true;
+    }
+
+    const saveDeclaredPower = () => {
+      if(declaredPower.value) localStorage.setItem(storeId, declaredPower.value.toString());
+      edit.value = false;
+    }
     
     // watch(power, (prevPwr, currPwr) => {
     //   console.log(currPwr);

@@ -1,19 +1,22 @@
 <template>
     <!-- <TheWelcome /> -->
-    <div style="display:flex; flex-direction: column; width: 100%; border: thin solid #fff;">
+    <div class="content-container">
         <h1 style="margin:2px; padding: 0; display: flex; flex-direction: row; justify-content: space-between;">
             <b>Power Stations</b>
             <b>Total: {{ total.toLocaleString('en-US') }}Mw</b>
         </h1>
 
-        <table border="1" style="width: 100%; font-weight: bold;">
+        <table border="1" class="table table-bordered" style="width: 100%; font-weight: bold;">
             <thead>
-                <th>S/N</th>
-                <th>Station</th>
-                <th>Power(Mw)</th>
-                <th>REACTIVE POWER (Mvar)</th>
-                <th>VOLTAGE (Kv)</th>
-                <th>STATUS</th>
+                <tr>
+                    <th>S/N</th>
+                    <th>Station</th>
+                    <th>Power(Mw)</th>
+                    <th>REACTIVE POWER (Mvar)</th>
+                    <th>VOLTAGE (Kv)</th>
+                    <th>STATUS</th>
+                    <th>Declared Load</th>
+                </tr>
             </thead>
             <tbody>
                 <!-- <component :is="AfamIV" :sn="1" @emitTotal="getStationTotal" />

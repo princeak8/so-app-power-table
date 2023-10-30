@@ -1,122 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import { type dataType, type sectionType, type processingStationType, type stationType, type rawSectionType, type rawStationType } from "@/types/index";
-import { stationStore } from "@/helper";
+import { stationStore, formatStreamedData } from "@/helper";
 import { checkConnections, disconnected } from './connectionHelpers';
 import { ref, watch, onBeforeMount } from 'vue';
-import { randomNumber } from './utilities';
-
-let rawData = ref({
-    id: "afamIv_vPs",
-    t: "11:50:2",
-    units: [
-      {
-        id: "gt17",
-        td: {
-          mw: randomNumber(95, 300),
-          A: randomNumber(1, 600),
-          V: randomNumber(300, 360),
-          mvar: randomNumber(0, 45)
-        }
-      },
-      {
-        id: "gt18",
-        td: {
-          mw: randomNumber(95, 300),
-          A: randomNumber(1, 600),
-          V: randomNumber(300, 360),
-          mvar: randomNumber(0, 45)
-        }
-      }
-    ]
-  });
-
-  const getRawData = () => {
-    return {
-    id: "afamIv_vPs",
-    t: "11:50:2",
-    units: [
-      {
-        id: "gt17",
-        td: {
-          mw: randomNumber(95, 300),
-          A: randomNumber(1, 600),
-          V: randomNumber(300, 360),
-          mvar: randomNumber(0, 45)
-        }
-      },
-      {
-        id: "gt18",
-        td: {
-          mw: randomNumber(95, 300),
-          A: randomNumber(1, 600),
-          V: randomNumber(300, 360),
-          mvar: randomNumber(0, 45)
-        }
-      }
-    ]
-  }
-  }
-
-  const formatStreamedData = (rawData: rawStationType): stationType | null => {
-      let formattedSectionData = formatSections(rawData);
-
-      let formattedInnerData = (formattedSectionData != null ) ? formatAllInnerData(formattedSectionData.sections) : null;
-      // let formattedInnerData = (formattedSectionData != null) ? formatAllInnerData(formattedSectionData) : null
-      if(formattedSectionData != null && formattedInnerData != null) {
-        return {...formattedSectionData, sections: formattedInnerData};
-      }
-      return null;
-  }
-
-  //convert units and lines to sections
-  const formatSections = (rawStationData: rawStationType): processingStationType | null => {
-    let sectionData:rawSectionType[];
-    if(rawStationData.units) {
-       sectionData = [...rawStationData.units];
-      //  delete rawStationData.units;
-       return {...rawStationData, sections: sectionData};
-    }
-    if(rawStationData.lines) {
-      sectionData = [...rawStationData.lines];
-      //  delete rawStationData.lines;
-      return {...rawStationData, sections: sectionData};
-    }
-    return null;
-  }
-
-
-  // loop through all the lines/units and format the data
-  const formatAllInnerData = (rawSectionData: rawSectionType[]): sectionType[] => {
-      let result: sectionType[] = [];
-      rawSectionData.forEach((rawSection: rawSectionType) => {
-        let formattedSection = formatInnerData(rawSection);
-        if(formattedSection != null) result.push(formattedSection);
-      })
-      return result;
-  }
-
-  // convert td or pd to data
-  const formatInnerData = (rawSectionData: rawSectionType): sectionType | null => {
-      let dt: dataType;
-      if(rawSectionData.td) {
-        dt = {...rawSectionData.td};
-        // delete rawSectionData.td;
-        return {...rawSectionData, data: dt};
-      }
-      if(rawSectionData.pd) {
-        dt = {...rawSectionData.pd};
-        // delete rawSectionData.pd;
-        return {...rawSectionData, data: dt};
-      }
-      if(rawSectionData.gd) {
-        dt = {...rawSectionData.gd};
-        // delete rawSectionData.gd;
-        return {...rawSectionData, data: dt};
-      }
-      return null;
-  }
 
   let connected = ref(false);
   let intervalId = 0;
@@ -139,7 +25,7 @@ let rawData = ref({
 
   const connect = () => {
 
-      const ws = new WebSocket('ws://localhost:3002');
+      const ws = new WebSocket(import.meta.env.VITE_SOCKET_URL);
 
       ws.onmessage = (msg) => {
           try{
@@ -227,7 +113,10 @@ let rawData = ref({
       </nav>
     </div>
   </header> -->
-
+  <div style="display: flex; flex-direction: row; justify-content: flex-end;">
+    <RouterLink to="/" style="margin-right: 5%;"><b>HOME</b></RouterLink>
+    <RouterLink to="/settings" style="margin-right: 5%;"><b>SETTINGS</b></RouterLink>
+  </div>
   <RouterView />
 </template>
 
@@ -271,7 +160,7 @@ nav a:first-of-type {
   header {
     display: flex;
     place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    /* padding-right: calc(var(--section-gap) / 2); */
   }
 
   .logo {

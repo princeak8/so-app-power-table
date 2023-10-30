@@ -22,5 +22,4 @@ import TheWelcome from '../components/TheWelcome.vue'
 import { useStationData } from '@/stores/useStationData';
 
 const stationData = useStationData();
-console.log('station:', stationData.afamIV);
 </script>

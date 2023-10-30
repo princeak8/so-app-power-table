@@ -3,11 +3,16 @@ import { defineStore } from 'pinia'
 
 import { type dataType, type sectionType, type stationType, type powerDropType } from "@/types/index";
 import { initializeStation, currentTime, checkPowerDrop, getPower, getMvar, getVoltage } from '@/helper';
-import { stationId } from '@/enums';
+import { stationId, settings } from '@/enums';
 import { values, getAverage } from '@/utilities';
+import { inStorage, storage } from '@/localStorage';
 
-export const odukpaniStore = defineStore('odukpani', () => {
+const storeId = 'odukpani';
+
+export const odukpaniStore = defineStore(storeId, () => {
     const stationStore = ref(initializeStation(stationId.Odukpani));
+
+    const { VITE_POWER_SAMPLE_SIZE } = import.meta.env;
 
     const connected = ref(false);
     const connectionLost = ref(false);
@@ -24,8 +29,10 @@ export const odukpaniStore = defineStore('odukpani', () => {
         drop: 0, status: false
     })
 
-    watch(powerSampleArr, (arr) => {
-        if(arr.length >= import.meta.env.VITE_POWER_SAMPLE_SIZE) {
+    watch(() => powerSampleArr.value.length, () => {
+        let arr = powerSampleArr.value;
+        let SampleSize = (inStorage(settings.SampleSize)) ? storage(settings.SampleSize) : VITE_POWER_SAMPLE_SIZE;
+        if(arr.length >= SampleSize) {
             powerTarget.value = getAverage(arr);
             powerSampleArr.value = [];
         }
@@ -38,7 +45,16 @@ export const odukpaniStore = defineStore('odukpani', () => {
         kv.value = getVoltage(data.sections);
 
         // checking for sudden power drop below the threshold
-        let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr));
+        let loadDropOption = localStorage.getItem(settings.LoadDropOption);
+        let declaredPower = localStorage.getItem(storeId);
+
+        if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
+            powerTarget.value = parseFloat(declaredPower);
+        }else{
+            powerSampleArr.value.push(mw.value.pwr);
+        }
+        // checking for sudden power drop below the threshold
+        let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), storeId);
         if(drop) powerDrop.value = drop;
 
         connect();

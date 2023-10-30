@@ -16,5 +16,5 @@ export const getAverage = (arr: string[]) => {
     arr.forEach((val) => {
         sum += parseFloat(val);
     })
-    return (sum/arr.length)
+    return Math.round(sum/arr.length)
 }
