@@ -1,7 +1,7 @@
 <template>
   <tr :class="{redBg: powerDrop.status}">
     <td style="padding-left: 5px;">{{ sn }}</td>
-    <td class="center">DELTA 3 (Gas)</td>
+    <td class="center">DELTA 4 (Gas)</td>
     <td class="center">{{ vals.mw }}</td>
     <td class="center"> {{ vals.mx}} </td>
     <td class="center"> {{ vals.kv }} </td>

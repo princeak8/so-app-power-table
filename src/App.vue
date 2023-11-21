@@ -30,7 +30,7 @@ import { ref, watch, onBeforeMount } from 'vue';
       ws.onmessage = (msg) => {
           try{
               const fMsg = JSON.parse(msg.data);
-              // if(fMsg.id=='shiroroPs') console.log('fmsg:', fMsg);
+              // if(fMsg.id=='odukpaniNippPs') console.log('fmsg:', fMsg);
               connected.value = true;
               if(fMsg.id && fMsg.nc) {
                 let ncStation = stationStore(fMsg.id);
