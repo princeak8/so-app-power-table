@@ -71,9 +71,18 @@ export const dadinkowaStore = defineStore(storeId, () => {
     }
 
     function checkConnection () {
-        if(timeSinceLastConnection.value && timeSinceLastConnection.value >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) {
-            disconnected();
+        // console.log('checking dadinkowa connection');
+        // console.log('last Connected Time:', lastConnectedTime.value);
+        // console.log('last Connected Time:', Math.abs(currentTime() - lastConnectedTime.value));
+        // console.log(`${timeSinceLastConnection.value} >= ${import.meta.env.VITE_MAX_NO_UPDATE_TIME}`)
+        if(lastConnectedTime.value != undefined) {
+            if(Math.abs(currentTime() - lastConnectedTime.value) >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) disconnected();
+        }else{
+            if(connected.value) disconnected();
         }
+        // if(timeSinceLastConnection.value && timeSinceLastConnection.value >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) {
+        //     disconnected();
+        // }
     }
 
     function acknowledgePowerDrop () {
@@ -86,7 +95,7 @@ export const dadinkowaStore = defineStore(storeId, () => {
     const lastConnected = computed(() => lastConnectedTime.value);
     const vals = computed(() => values(mw.value, mx.value, kv.value));
     const timeSinceLastConnection = computed(() => {
-        return (lastConnectedTime.value != undefined) ? Math.abs((currentTime() - lastConnectedTime.value)) : false;
+        return (lastConnectedTime.value != undefined) ? Math.abs(currentTime() - lastConnectedTime.value) : false;
     })
 
   return { 

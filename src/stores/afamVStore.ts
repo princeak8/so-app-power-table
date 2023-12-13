@@ -74,8 +74,10 @@ export const afamVStore = defineStore(storeId, () => {
 
     //Checks that the last time since the station's value was updated has not exceeded the max update time
     function checkConnection () {
-        if(timeSinceLastConnection.value && timeSinceLastConnection.value >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) {
-            disconnected();
+        if(lastConnectedTime.value != undefined) {
+            if(Math.abs(currentTime() - lastConnectedTime.value) >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) disconnected();
+        }else{
+            if(connected.value) disconnected();
         }
     }
 

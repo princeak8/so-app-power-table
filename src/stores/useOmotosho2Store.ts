@@ -36,8 +36,10 @@ export const useOmotosho2Store = defineStore('useOmotosho2', () => {
     }
 
     function checkConnection () {
-        if(timeSinceLastConnection.value && timeSinceLastConnection.value >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) {
-            disconnected();
+        if(lastConnectedTime.value != undefined) {
+            if(Math.abs(currentTime() - lastConnectedTime.value) >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) disconnected();
+        }else{
+            if(connected.value) disconnected();
         }
     }
 

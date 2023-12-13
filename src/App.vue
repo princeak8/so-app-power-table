@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { stationStore, formatStreamedData } from "@/helper";
-import { checkConnections, disconnected } from './connectionHelpers';
+import { checkConnections, disconnect } from './connectionHelpers';
 import { ref, watch, onBeforeMount } from 'vue';
 
   let connected = ref(false);
@@ -84,7 +84,7 @@ import { ref, watch, onBeforeMount } from 'vue';
 
   function connectionStopped () {
       connected.value = false;
-      disconnected();
+      disconnect();
       clearInterval(intervalId);
       // console.log('stop checking');
   }
