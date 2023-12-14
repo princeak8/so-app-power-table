@@ -36,10 +36,14 @@ import StationPowerDropCols from './inc/StationPowerDropCols.vue'
         sn: Number
     });
 
-    const emits = defineEmits(['emitTotal']);
+    const emits = defineEmits(['emitTotal', 'resetTotal']);
 
     const connectionStatusColor = computed(() => {
       return (isConnected.value) ? 'connected' : (isConnectionLost.value) ? 'connectionLost' : 'notConnected'
+    })
+
+    watch(() => isConnected.value, (connected) => {
+      if(!connected) emits('resetTotal', station.value.id);
     })
 
     watch(vals, (currentVals) => {

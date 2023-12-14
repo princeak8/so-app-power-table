@@ -21,7 +21,7 @@
             <tbody>
                 <!-- <component :is="AfamIV" :sn="1" @emitTotal="getStationTotal" />
                 <component :is="AfamV" :sn="2" @emitTotal="getStationTotal" /> -->
-                <component v-for="(station, n) in stationComponents" :is="station" :sn="n+1" @emitTotal="getStationTotal" />
+                <component v-for="(station, n) in stationComponents" :is="station" :sn="n+1" @emitTotal="getStationTotal" @resetTotal="resetStationTotal" />
                 Total: {{ total.toLocaleString('en-US') }}
             </tbody>
         </table>
@@ -48,6 +48,10 @@
         // console.log('id: ', id);
         // console.log('total', total);
         stationsTotal.value[id] = total;
+    }
+
+    const resetStationTotal = (id: string) => {
+        stationsTotal.value[id] = 0;
     }
 
     const total = computed(() => {
