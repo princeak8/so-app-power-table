@@ -46,6 +46,7 @@ export const afamIVStore = defineStore(storeId, () => {
         kv.value = getVoltage(data.sections);
 
         let loadDropOption = localStorage.getItem(settings.LoadDropOption);
+        console.log("Load Drop Option:", loadDropOption);
         let declaredPower = localStorage.getItem(storeId);
 
         // console.log(`${loadDropOption} && ${loadDropOption}==${settings.DeclaredPower} && ${declaredPower}`);

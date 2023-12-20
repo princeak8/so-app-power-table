@@ -36,7 +36,11 @@ import StationPowerDropCols from './inc/StationPowerDropCols.vue'
         sn: Number
     });
 
-    const emits = defineEmits(['emitTotal', 'resetTotal']);
+    const emits = defineEmits(['emitTotal', 'resetTotal', 'startAlarm', 'stopAlarm']);
+
+    watch(() => powerDrop.value, (powerDropped) => {
+        if(powerDropped.status) emits('startAlarm');
+    })
 
     const connectionStatusColor = computed(() => {
       return (isConnected.value) ? 'connected' : (isConnectionLost.value) ? 'connectionLost' : 'notConnected'
@@ -52,6 +56,7 @@ import StationPowerDropCols from './inc/StationPowerDropCols.vue'
 
     const acknowledgeDrop = () => {
         stationStore.acknowledgePowerDrop();
+        emits('stopAlarm');
     }
 
     const ignorePowerDrop = () => {
