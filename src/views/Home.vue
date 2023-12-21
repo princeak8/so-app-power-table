@@ -4,7 +4,7 @@
         <h1 style="margin:2px; padding: 0; display: flex; flex-direction: row; justify-content: space-between;">
             <b>Power Stations</b>
             <b>Total: {{ total.toLocaleString('en-US') }}Mw</b>
-            <audio ref="alarm" loop src="alarm/alert-alarm-1.wav"></audio>
+            <audio ref="alarm" src="alarm/alert-alarm-1.wav"></audio>
             <!-- <button @click="startAlarm">Start Alarm</button>
             <button @click="stopAlarm">Stop Alarm</button> -->
         </h1>
