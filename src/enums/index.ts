@@ -34,7 +34,12 @@ export enum stationId {
     Ekim = 'ekim',
     Olorunsogo1 = 'olorunsogo1',
     Olorunsogo2 = 'olorunsogo2',
-    OlorunsogoLines = 'olorunsogoLines'
+    OlorunsogoLines = 'olorunsogoLines',
+
+    OmotoshoGas = 'omotoshoGas',
+    OlorunsogoGas = 'olorunsogoGas',
+    OlorunsogoNipp = 'olorunsogoNipp',
+    Ibom = "ibom"
 }
 
 export enum settings {

@@ -11,7 +11,7 @@ import { inStorage, storage } from '@/localStorage';
 const storeId = 'olorunsogoNipp';
 
 export const olorunsogoNippStore = defineStore(storeId, () => {
-    const stationStore = ref(initializeStation('olorunsogoNipp'));
+    const stationStore = ref(initializeStation(stationId.OlorunsogoLines));
     const olorunsogoGasStore = olorunsogoStore();
 
     const connected = ref(false);
