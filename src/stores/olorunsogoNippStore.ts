@@ -42,8 +42,8 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
 
     function set (data: stationType) {
         stationStore.value = {...data};
-        mw.value = getPower(data.sections, true);
-        mx.value = getMvar(data.sections, true);
+        mw.value = getPower(data.sections);
+        mx.value = getMvar(data.sections);
         kv.value = getVoltage(data.sections);
 
         connect();

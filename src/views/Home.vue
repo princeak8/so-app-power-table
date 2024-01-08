@@ -1,6 +1,8 @@
 <template>
     <!-- <TheWelcome /> -->
     <div class="content-container">
+        <h1 style="color: #355E3B; font-weight: bold;">GENERATION LOSS DETECTION SYSTEM</h1>
+
         <h1 style="margin:2px; padding: 0; display: flex; flex-direction: row; justify-content: space-between;">
             <b>Power Stations</b>
             <b>Total: {{ total.toLocaleString('en-US') }}Mw</b>
