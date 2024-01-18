@@ -1,0 +1,48 @@
+<template>
+    <div style="margin-right: auto; margin-left: auto; width:100%">
+        <table border="1" class="table" style="width: 100%; font-weight: bold;">
+            <thead style="font-weight:bold">
+                <td><b>S/N</b></td>
+                <th><b>STATION</b></th>
+                <th><b>LOAD(Mw)</b></th>
+                <th><b>PREVIOUS LOAD(%drop)</b></th>
+                <th><b>REFERENCE LOAD(%drop)</b></th>
+                <th><b>CALCULATION TYPE</b></th>
+                <th><b>TIME OF DROP</b></th>
+            </thead>
+            <tbody>
+                <tr v-if="loadDrops.length > 0" v-for="(loadDrop, i) in loadDrops">
+                    <td class="center">{{ i+1 }}</td>
+                    <td class="center">{{ loadDrop.station.name }}</td>
+                    <td class="center">{{ loadDrop.load }}</td>
+                    <td class="center">{{ loadDrop.previousLoad }}({{ loadDrop.prevLoadPercentage }}%)</td>
+                    <td class="center">{{ loadDrop.referenceLoad }}({{ loadDrop.refLoadPercentage }}%)</td>
+                    <td class="center">{{ loadDrop.calculationType }}</td>
+                    <td class="center">{{ loadDrop.timeOfDrop }}</td>
+                </tr>
+                <tr v-else> No load drops found </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script setup lang="ts">
+    import { ref, computed, watch, PropType } from 'vue';
+    import { type loadDropData} from "../../types";
+
+    const props = defineProps({
+        loadDrops: {
+            type: Object as PropType<loadDropData[]>
+        }
+    });
+
+    // const prevLoadPercentage = computed(() => percentage(loadDrop.load, loadDrop.previousLoad));
+    // const refLoadPercentage = computed(() => percentage(loadDrop.load, loadDrop.referenceLoad));
+
+    // console.log(prevLoadPercentage);
+
+    const percentage = (firstVal, secondVal) => {
+        let diff = firstVal - secondVal;
+        return ((diff/firstVal) * 100).toFixed(2);
+    }
+</script>

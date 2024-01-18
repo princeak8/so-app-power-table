@@ -26,7 +26,7 @@ export const ibomStore = defineStore(storeId, () => {
     const powerTarget = ref(0);
 
     const powerDrop = ref<powerDropType>({
-        drop: 0, status: false
+        drop: 0, status: false, percentage: 0
     })
 
     watch(() => powerSampleArr.value.length, () => {
@@ -56,7 +56,7 @@ export const ibomStore = defineStore(storeId, () => {
     }
 
     function acknowledgePowerDrop () {
-        powerDrop.value = {drop: 0, status: false};
+        powerDrop.value = {drop: 0, status: false, percentage: 0};
     }
 
     const station = computed(() => stationStore.value)
@@ -127,7 +127,9 @@ export const ibomStore = defineStore(storeId, () => {
         return (lastConnected.value != undefined) ? Math.abs((currentTime() - lastConnected.value)) : false;
     })
 
-  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals,
+    const targetPower = computed(() => powerTarget.value);
+
+  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower,
                 disconnected, connect, checkConnection, acknowledgePowerDrop 
             }
 })

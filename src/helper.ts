@@ -147,7 +147,10 @@ export const checkPowerDrop = (target: number, power: number, storeId: string = 
                             import.meta.env.VITE_MAX_LOAD_DROP_THRESHOLD : localStorage.getItem(settings.LoadDrop)
         const dropTarget = (maxThreshold/100) * target;
         const diff = target - power;
-        if(diff > dropTarget) return {drop: diff, status: true};
+        if(diff > dropTarget) {
+            const percentage = (diff/target) * 100;
+            return {drop: diff, percentage, status: true};
+        }
     }
     return null;
 }

@@ -26,7 +26,7 @@ export const azuraStore = defineStore(storeId, () => {
     const powerTarget = ref(0);
 
     const powerDrop = ref<powerDropType>({
-        drop: 0, status: false
+        drop: 0, status: false, percentage: 0
     })
 
     watch(() => powerSampleArr.value.length, () => {
@@ -78,7 +78,7 @@ export const azuraStore = defineStore(storeId, () => {
     }
 
     function acknowledgePowerDrop () {
-        powerDrop.value = {drop: 0, status: false};
+        powerDrop.value = {drop: 0, status: false, percentage: 0};
     }
 
     const station = computed(() => stationStore.value)
@@ -86,12 +86,13 @@ export const azuraStore = defineStore(storeId, () => {
     const isConnectionLost = computed(() => connectionLost.value);
     const lastConnected = computed(() => lastConnectedTime.value);
     const vals = computed(() => values(mw.value, mx.value, kv.value));
+    const targetPower = computed(() => powerTarget.value);
     const timeSinceLastConnection = computed(() => {
         return (lastConnectedTime.value != undefined) ? Math.abs((currentTime() - lastConnectedTime.value)) : false;
     })
 
   return { 
-                station, isConnected, isConnectionLost, lastConnected, powerDrop, vals,
+                station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower,
                 set, disconnected, connect, checkConnection, acknowledgePowerDrop 
             }
 })

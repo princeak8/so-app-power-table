@@ -30,7 +30,7 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
     const powerTarget = ref(0);
 
     const powerDrop = ref<powerDropType>({
-        drop: 0, status: false
+        drop: 0, status: false, percentage: 0
     })
 
     watch(powerSampleArr, (arr) => {
@@ -68,7 +68,7 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
     }
 
     function acknowledgePowerDrop () {
-        powerDrop.value = {drop: 0, status: false};
+        powerDrop.value = {drop: 0, status: false, percentage: 0};
     }
 
     const station = computed(() => stationStore.value)
@@ -116,7 +116,9 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
         return (lastConnectedTime.value != undefined) ? Math.abs((currentTime() - lastConnectedTime.value)) : false;
     })
 
-  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals,
+    const targetPower = computed(() => powerTarget.value);
+
+  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower,
                 set, disconnected, connect, checkConnection, acknowledgePowerDrop 
             }
 })

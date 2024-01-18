@@ -39,6 +39,7 @@ export interface rawStationType {
 export interface powerDropType {
     drop: number;
     status: boolean;
+    percentage: number;
 }
 
 export interface powerValObjType {
@@ -57,4 +58,36 @@ export interface singleStoreValsType {
     power: powerValObjType;
     mvar: mvarValObjType;
     voltage: voltageValObjType;
+}
+
+export interface saveDropData {
+    powerStationId: string;
+    load: number;
+    percentage: number;
+    timeOfDrop: Date;
+    calType: string;
+}
+
+export interface acknowledgeStationData {
+    identifier: string;
+    acknowledgedAt: Date;
+}
+
+export interface powerStationData {
+    id: number;
+    name: string;
+    identifier: string;
+}
+
+export interface loadDropData {
+    id: number;
+    station: powerStationData;
+    load: number;
+    previousLoad: number;
+    referenceLoad: number;
+    timeOfDrop: Date;
+    calculationType: string;
+    acknowledgedAt: Date;
+    prevLoadPercentage: string;
+    refLoadPercentage: string;
 }

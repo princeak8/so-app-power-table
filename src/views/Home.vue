@@ -7,8 +7,10 @@
             <b>Power Stations</b>
             <b>Total: {{ total.toLocaleString('en-US') }}Mw</b>
             <audio ref="alarm" src="alarm/alert-alarm-1.wav"></audio>
-            <!-- <button @click="startAlarm">Start Alarm</button>
-            <button @click="stopAlarm">Stop Alarm</button> -->
+            <!-- <button @click="startAlarm">Start Alarm</button> -->
+            <!-- <button @click="saveLoadDrop">Save Incidence</button> -->
+            <!-- <p>{{ Date() }}</p> -->
+            <!-- <button @click="AcknowledgeIncidence">Acknowledge Incidence</button>  -->
         </h1>
 
         <table border="1" class="table table-bordered" style="width: 100%; font-weight: bold;">
@@ -29,6 +31,7 @@
                 <component v-for="(station, n) in stationComponents" :is="station" :sn="n+1" 
                     @emitTotal="getStationTotal" @resetTotal="resetStationTotal" 
                     @startAlarm="startAlarm" @stopAlarm="stopAlarm"
+                    @saveLoadDrop="saveLoadDrop" @acknowledge="AcknowledgeStationIncidence"
                 />
                 Total: {{ total.toLocaleString('en-US') }}
             </tbody>
@@ -44,14 +47,52 @@
     import AfamV from '@/components/AfamV.vue';
     import AfamVI from '@/components/AfamVI.vue';
     import stationComponents from '@/stationComponents';
+    import axios from "axios";
+    import { type saveDropData, type acknowledgeStationData } from "@/types";
 
     const stationsTotal= ref<Record<string, any>>({});
     const alarm = ref<HTMLAudioElement | null>(null);
 
     const numberWithCommas = (x:string) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function saveLoadDrop(data:saveDropData) {
+        console.log('save');
+        // const data = {
+        //     "powerStationId" : 'alaoji', 
+        //     "load": 400, 
+        //     "percentage": 20, 
+        //     "timeOfDrop": new Date().toISOString(),
+        //     "calType": "average-power"
+        // }
+        const url = "http://localhost:3002/api/load_drop/save";
+        axios.post(url, data)
+        .then((res) => {
+            console.log("response:", res);
+        })
+        .catch((err) => {
+            console.log("error:", err.response.data.error);
+        })
+    }
+
+    function AcknowledgeStationIncidence(data: acknowledgeStationData) {
+        // const data = {
+        //     "identifier" : "gbarain",  
+        //     "acknowledgedAt": "2024-01-10 12:17:03"
+        // }
+        const url = "http://localhost:3002/api/load_drop/acknowledge_station";
+        axios.post(url, data)
+        .then((res) => {
+            console.log("response:", res);
+        })
+        .catch((err) => {
+            console.log("error:", err.response.data.error);
+        })
+    }
+
     function startAlarm() {
+        console.log('alarm');
         if (alarm.value) {
             alarm.value.play();
         }
