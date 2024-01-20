@@ -47,7 +47,7 @@
     import AfamV from '@/components/AfamV.vue';
     import AfamVI from '@/components/AfamVI.vue';
     import stationComponents from '@/stationComponents';
-    // import axios from "axios";
+    import axios from "axios";
     import { type saveDropData, type acknowledgeStationData } from "@/types";
 
     const stationsTotal= ref<Record<string, any>>({});
@@ -67,13 +67,13 @@
         //     "calType": "average-power"
         // }
         const url = "http://localhost:3002/api/load_drop/save";
-        // axios.post(url, data)
-        // .then((res) => {
-        //     console.log("response:", res);
-        // })
-        // .catch((err) => {
-        //     console.log("error:", err.response.data.error);
-        // })
+        axios.post(url, data)
+        .then((res) => {
+            console.log("response:", res);
+        })
+        .catch((err) => {
+            console.log("error:", err.response.data.error);
+        })
     }
 
     function AcknowledgeStationIncidence(data: acknowledgeStationData) {
@@ -82,13 +82,13 @@
         //     "acknowledgedAt": "2024-01-10 12:17:03"
         // }
         const url = "http://localhost:3002/api/load_drop/acknowledge_station";
-        // axios.post(url, data)
-        // .then((res) => {
-        //     console.log("response:", res);
-        // })
-        // .catch((err) => {
-        //     console.log("error:", err.response.data.error);
-        // })
+        axios.post(url, data)
+        .then((res) => {
+            console.log("response:", res);
+        })
+        .catch((err) => {
+            console.log("error:", err.response.data.error);
+        })
     }
 
     function startAlarm() {
