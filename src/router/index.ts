@@ -19,11 +19,11 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: Settings
     },
-    // {
-    //   path: '/reports',
-    //   name: 'reports',
-    //   component: Reports
-    // },
+    {
+      path: '/reports',
+      name: 'reports',
+      component: Reports
+    },
   ]
 })
 

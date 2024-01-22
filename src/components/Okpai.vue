@@ -23,24 +23,39 @@ import { storeToRefs } from 'pinia'
 import { okpaiStore } from "@/stores/okpaiStore"
 import { inStorage, storage } from '@/localStorage';
 import { ignore, lift } from '@/helper';
-import StationPowerDropCols from './inc/StationPowerDropCols.vue'
+import StationPowerDropCols from './inc/StationPowerDropCols.vue';
+import { stationId, settings } from '@/enums';
 
     const stationStore = okpaiStore();
     const storeId = stationStore.$id;
-    const { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals } = storeToRefs(stationStore)
+    const { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower } = storeToRefs(stationStore)
     const declaredPower = ref(localStorage.getItem(storeId));
     const edit = ref(false);
-    const powerDropIgnored = ref(inStorage('ignore-'+storeId) && storage('ignore-'+storeId) == '1')
+    const powerDropIgnored = ref(inStorage('ignore-'+storeId) && storage('ignore-'+storeId) == '1');
+    const currLoad = ref();
+    const prevLoad = ref();
 
     const props = defineProps({
         sn: Number,
         isParent: Boolean
     });
 
-    const emits = defineEmits(['emitTotal', 'resetTotal', 'startAlarm', 'stopAlarm']);
+    const emits = defineEmits(['emitTotal', 'resetTotal', 'startAlarm', 'stopAlarm', 'saveLoadDrop', 'acknowledge']);
 
     watch(() => powerDrop.value, (powerDropped) => {
-        if(powerDropped.status) emits('startAlarm');
+      if(powerDropped.status) {
+          emits('startAlarm');
+          const data = {
+              powerStationId: station.value.id, 
+              load: parseFloat(vals.value.mw), 
+              previousLoad: parseFloat(prevLoad.value),
+              referenceLoad: targetPower.value,
+              percentage: powerDrop.value.percentage, 
+              timeOfDrop: new Date().toISOString(),
+              calType: localStorage.getItem(settings.LoadDropOption)
+            }
+            emits('saveLoadDrop', data);
+        }
     })
 
     const connectionStatusColor = computed(() => {
@@ -59,6 +74,11 @@ import StationPowerDropCols from './inc/StationPowerDropCols.vue'
     const acknowledgeDrop = () => {
         stationStore.acknowledgePowerDrop();
         emits('stopAlarm');
+        const data = {
+            identifier: station.value.id, 
+            acknowledgedAt: new Date().toISOString()
+        }
+        emits('acknowledge', data);
     }
 
     const ignorePowerDrop = () => {

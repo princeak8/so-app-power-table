@@ -121,6 +121,7 @@ import { ref, watch, onBeforeMount } from 'vue';
   <div style="display: flex; flex-direction: row; justify-content: flex-end;">
     <RouterLink to="/" style="margin-right: 5%;"><b>HOME</b></RouterLink>
     <RouterLink to="/settings" style="margin-right: 5%;"><b>SETTINGS</b></RouterLink>
+    <RouterLink to="/reports" style="margin-right: 5%;"><b>REPORTS</b></RouterLink>
   </div>
   <RouterView />
 </template>

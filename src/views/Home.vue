@@ -58,7 +58,7 @@
     }
 
     function saveLoadDrop(data:saveDropData) {
-        console.log('save');
+        // console.log('save');
         // const data = {
         //     "powerStationId" : 'alaoji', 
         //     "load": 400, 

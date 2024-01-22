@@ -62,7 +62,7 @@ import { stationId, settings } from '@/enums';
               timeOfDrop: new Date().toISOString(),
               calType: localStorage.getItem(settings.LoadDropOption)
             }
-            // emits('saveLoadDrop', data);
+            emits('saveLoadDrop', data);
         }
     })
 
@@ -102,7 +102,7 @@ import { stationId, settings } from '@/enums';
             identifier: station.value.id, 
             acknowledgedAt: new Date().toISOString()
         }
-        // emits('acknowledge', data);
+        emits('acknowledge', data);
     }
 
     const ignorePowerDrop = () => {
