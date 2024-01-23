@@ -50,7 +50,7 @@ import { stationId, settings } from '@/enums';
               load: parseFloat(vals.value.mw), 
               previousLoad: parseFloat(prevLoad.value),
               referenceLoad: targetPower.value,
-              percentage: powerDrop.value.percentage, 
+              // percentage: powerDrop.value.percentage, 
               timeOfDrop: new Date().toISOString(),
               calType: localStorage.getItem(settings.LoadDropOption)
             }

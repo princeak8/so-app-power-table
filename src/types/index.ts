@@ -63,7 +63,8 @@ export interface singleStoreValsType {
 export interface saveDropData {
     powerStationId: string;
     load: number;
-    percentage: number;
+    previousLoad: number;
+    referenceLoad: number;
     timeOfDrop: Date;
     calType: string;
 }
