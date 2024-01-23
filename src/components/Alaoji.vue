@@ -72,8 +72,12 @@ import { stationId, settings } from '@/enums';
     //     return pwrObj;
     // });
     watch(vals, (currentVals) => {
-      if(currentVals.mw != '' && currentVals.mw != '-') emits('emitTotal', station.value.id, currentVals.mw);
-      if(powerDrop.value.status) emits('startAlarm');
+      if(currentVals.mw != '' && currentVals.mw != '-') {
+            prevLoad.value = currLoad.value;
+            currLoad.value = currentVals.mw;
+            emits('emitTotal', station.value.id, currentVals.mw);
+      }
+      // if(powerDrop.value.status) emits('startAlarm');
     })
 
     const acknowledgeDrop = () => {
