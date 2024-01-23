@@ -56,7 +56,7 @@ import { stationId, settings } from '@/enums';
           const data = {
               powerStationId: station.value.id, 
               load: parseFloat(vals.value.mw), 
-              previousLoad: parseFloat(prevLoad.value),
+              previousLoad: (prevLoad.value==null) ? 0 : parseFloat(prevLoad.value),
               referenceLoad: targetPower.value,
               // percentage: powerDrop.value.percentage, 
               timeOfDrop: new Date().toISOString(),

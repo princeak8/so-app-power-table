@@ -12,7 +12,7 @@ import { inStorage, storage } from '@/localStorage';
 const storeId = 'omotosho';
 
 export const omotoshoStore = defineStore(storeId, () => {
-    const stationStore = ref(initializeStation('omotosho'));
+    const stationStore = ref(initializeStation(stationId.OmotoshoGas));
 
     const { VITE_POWER_SAMPLE_SIZE } = import.meta.env;
     /*

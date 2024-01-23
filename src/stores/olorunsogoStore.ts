@@ -12,7 +12,7 @@ import { inStorage, storage } from '@/localStorage';
 const storeId = 'olorunsogo';
 
 export const olorunsogoStore = defineStore(storeId, () => {
-    const stationStore = ref(initializeStation('olorunsogo'));
+    const stationStore = ref(initializeStation(stationId.OlorunsogoGas));
     const { VITE_POWER_SAMPLE_SIZE } = import.meta.env;
     /*
         Station1 and station2 represents the two stations that are been added together to get the value for the power station
