@@ -36,7 +36,10 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
     watch(powerSampleArr, (arr) => {
         if(arr.length >= import.meta.env.VITE_POWER_SAMPLE_SIZE) {
             powerTarget.value = getAverage(arr);
-            powerSampleArr.value = [];
+            // powerSampleArr.value = [];
+            powerSampleArr.value.shift(); // remove the first/oldest element from the array
+        }else{
+            powerTarget.value = 0;
         }
     })
 
@@ -89,6 +92,7 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
             if(mw.value != undefined) {
                 let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr));
                 if(drop) powerDrop.value = drop;
+                if(drop?.status) powerSampleArr.value = []; // clear the sample array if load drop is flagged
             }
             power = {pwr: pwr.toFixed(2), status: (power.status && olorunsogoMw.status)};
             mvar = {pwr: mxPwr.toFixed(2), status: (mvar.status && olorunsogoMx.status)};

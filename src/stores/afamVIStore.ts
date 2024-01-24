@@ -34,7 +34,10 @@ export const afamVIStore = defineStore(storeId, () => {
         // console.log('sample array:', arr.length);
         if(arr.length >= SampleSize) {
             powerTarget.value = getAverage(arr);
-            powerSampleArr.value = [];
+            // powerSampleArr.value = [];
+            powerSampleArr.value.shift(); // remove the first/oldest element from the array
+        }else{
+            powerTarget.value = 0;
         }
     })
 
@@ -57,6 +60,7 @@ export const afamVIStore = defineStore(storeId, () => {
         let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), storeId);
         // console.log('power drop target:', powerTarget.value);
         if(drop) powerDrop.value = drop;
+        if(drop?.status) powerSampleArr.value = []; // clear the sample array if load drop is flagged
         
         connect();
         lastConnectedTime.value = Math.round(new Date().getTime() / 1000);

@@ -34,7 +34,10 @@ export const parasEnergyStore = defineStore(storeId, () => {
         let SampleSize = (inStorage(settings.SampleSize)) ? storage(settings.SampleSize) : VITE_POWER_SAMPLE_SIZE;
         if(arr.length >= SampleSize) {
             powerTarget.value = getAverage(arr);
-            powerSampleArr.value = [];
+            // powerSampleArr.value = [];
+            powerSampleArr.value.shift(); // remove the first/oldest element from the array
+        }else{
+            powerTarget.value = 0;
         }
     })
 
@@ -56,6 +59,7 @@ export const parasEnergyStore = defineStore(storeId, () => {
         // checking for sudden power drop below the threshold
         let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), storeId);
         if(drop) powerDrop.value = drop;
+        if(drop?.status) powerSampleArr.value = []; // clear the sample array if load drop is flagged
 
         connect();
         lastConnectedTime.value = Math.round(new Date().getTime() / 1000);
