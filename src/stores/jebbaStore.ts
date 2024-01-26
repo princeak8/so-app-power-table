@@ -33,11 +33,10 @@ export const jebbaStore = defineStore(storeId, () => {
         let arr = powerSampleArr.value;
         let SampleSize = (inStorage(settings.SampleSize)) ? storage(settings.SampleSize) : VITE_POWER_SAMPLE_SIZE;
         if(arr.length >= SampleSize) {
+            // console.log("equals to sample size for jebba", powerTarget.value, arr);
             powerTarget.value = getAverage(arr);
             // powerSampleArr.value = [];
             powerSampleArr.value.shift(); // remove the first/oldest element from the array
-        }else{
-            powerTarget.value = 0;
         }
     })
 
@@ -59,7 +58,10 @@ export const jebbaStore = defineStore(storeId, () => {
         // checking for sudden power drop below the threshold
         let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), storeId);
         if(drop) powerDrop.value = drop;
-        if(drop?.status) powerSampleArr.value = []; // clear the sample array if load drop is flagged
+        if(drop?.status) {
+            powerSampleArr.value = []; // clear the sample array if load drop is flagged
+            powerTarget.value = 0;
+        }
 
         connect();
         lastConnectedTime.value = Math.round(new Date().getTime() / 1000);

@@ -36,8 +36,6 @@ export const omotoshoNippStore = defineStore(storeId, () => {
             powerTarget.value = getAverage(arr);
             // powerSampleArr.value = [];
             powerSampleArr.value.shift(); // remove the first/oldest element from the array
-        }else{
-            powerTarget.value = 0;
         }
     })
 
@@ -59,7 +57,10 @@ export const omotoshoNippStore = defineStore(storeId, () => {
         // checking for sudden power drop below the threshold
         let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), storeId);
         if(drop) powerDrop.value = drop;
-        if(drop?.status) powerSampleArr.value = []; // clear the sample array if load drop is flagged
+        if(drop?.status) {
+            powerSampleArr.value = []; // clear the sample array if load drop is flagged
+            powerTarget.value = 0;
+        }
 
         connect();
         lastConnectedTime.value = Math.round(new Date().getTime() / 1000);

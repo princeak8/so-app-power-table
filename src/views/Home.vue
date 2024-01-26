@@ -5,7 +5,7 @@
 
         <h1 style="margin:2px; padding: 0; display: flex; flex-direction: row; justify-content: space-between;">
             <b>Power Stations</b>
-            <b>Total: {{ total.toLocaleString('en-US') }}Mw</b>
+            <b>Total: {{ total.toLocaleString('en-US') }}MW</b>
             <audio ref="alarm" src="alarm/alert-alarm-1.wav"></audio>
             <!-- <button @click="startAlarm">Start Alarm</button> -->
             <!-- <button @click="saveLoadDrop">Save Incidence</button> -->
@@ -18,9 +18,9 @@
                 <tr>
                     <th>S/N</th>
                     <th>Station</th>
-                    <th>Power(Mw)</th>
-                    <th>REACTIVE POWER (Mvar)</th>
-                    <th>VOLTAGE (Kv)</th>
+                    <th>Power(MW)</th>
+                    <th>REACTIVE POWER (MVar)</th>
+                    <th>VOLTAGE (kV)</th>
                     <th>STATUS</th>
                     <th>Declared Load</th>
                 </tr>
@@ -33,7 +33,7 @@
                     @startAlarm="startAlarm" @stopAlarm="stopAlarm"
                     @saveLoadDrop="saveLoadDrop" @acknowledge="AcknowledgeStationIncidence"
                 />
-                Total: {{ total.toLocaleString('en-US') }}
+                Total: {{ total.toLocaleString('en-US') }}MW
             </tbody>
         </table>
     </div>
