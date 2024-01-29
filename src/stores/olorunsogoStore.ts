@@ -25,6 +25,7 @@ export const olorunsogoStore = defineStore(storeId, () => {
 
     const powerSampleArr = ref<string[]>([]);
     const powerTarget = ref(0);
+    const referencePower = ref(0);
 
     const powerDrop = ref<powerDropType>({
         drop: 0, status: false, percentage: 0
@@ -35,6 +36,7 @@ export const olorunsogoStore = defineStore(storeId, () => {
         let SampleSize = (inStorage(settings.SampleSize)) ? storage(settings.SampleSize) : VITE_POWER_SAMPLE_SIZE;
         if(arr.length >= SampleSize) {
             powerTarget.value = getAverage(arr);
+            referencePower.value = powerTarget.value;
             // powerSampleArr.value = [];
             powerSampleArr.value.shift(); // remove the first/oldest element from the array
         }
@@ -115,6 +117,7 @@ export const olorunsogoStore = defineStore(storeId, () => {
 
         if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
             powerTarget.value = parseFloat(declaredPower);
+            referencePower.value = powerTarget.value;
         }else{
             powerSampleArr.value.push(val.mw);
         }
@@ -133,8 +136,9 @@ export const olorunsogoStore = defineStore(storeId, () => {
     })
 
     const targetPower = computed(() => powerTarget.value);
+    const referenceLoad = computed(() => referencePower.value);
 
-  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, mergedVals, targetPower,
+  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, mergedVals, targetPower, referenceLoad,
                 disconnected, connect, checkConnection, acknowledgePowerDrop 
             }
 })

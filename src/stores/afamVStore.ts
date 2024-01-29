@@ -24,6 +24,7 @@ export const afamVStore = defineStore(storeId, () => {
 
     const powerSampleArr = ref<string[]>([]);
     const powerTarget = ref(0);
+    const referencePower = ref(0);
 
     const powerDrop = ref<powerDropType>({
         drop: 0, status: false, percentage: 0
@@ -35,6 +36,7 @@ export const afamVStore = defineStore(storeId, () => {
         // console.log('sample array:', arr.length);
         if(arr.length >= SampleSize) {
             powerTarget.value = getAverage(arr);
+            referencePower.value = powerTarget.value;
             // powerSampleArr.value = [];
             powerSampleArr.value.shift(); // remove the first/oldest element from the array
         }
@@ -52,6 +54,7 @@ export const afamVStore = defineStore(storeId, () => {
         // console.log(`${loadDropOption} && ${loadDropOption}==${settings.DeclaredPower} && ${declaredPower}`);
         if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
             powerTarget.value = parseFloat(declaredPower);
+            referencePower.value = powerTarget.value;
         }else{
             powerSampleArr.value.push(mw.value.pwr);
         }
@@ -96,12 +99,13 @@ export const afamVStore = defineStore(storeId, () => {
     const lastConnected = computed(() => lastConnectedTime.value);
     const vals = computed(() => values(mw.value, mx.value, kv.value));
     const targetPower = computed(() => powerTarget.value);
+    const referenceLoad = computed(() => referencePower.value);
     const timeSinceLastConnection = computed(() => {
         return (lastConnectedTime.value != undefined) ? Math.abs((currentTime() - lastConnectedTime.value)) : false;
     })
 
   return { 
-            station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower,
+            station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad,
             set, disconnected, connect, checkConnection, acknowledgePowerDrop 
         }
 })

@@ -36,7 +36,7 @@ import { stationId, settings } from '@/enums';
 
     const stationStore = afamVIStore();
     const storeId = stationStore.$id;
-    const { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower } = storeToRefs(stationStore)
+    const { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad } = storeToRefs(stationStore)
     const declaredPower = ref(localStorage.getItem(storeId));
     const edit = ref(false);
     const powerDropIgnored = ref(inStorage('ignore-'+storeId) && storage('ignore-'+storeId) == '1');
@@ -57,7 +57,7 @@ import { stationId, settings } from '@/enums';
               powerStationId: station.value.id, 
               load: parseFloat(vals.value.mw), 
               previousLoad: (prevLoad.value==null) ? 0 : parseFloat(prevLoad.value),
-              referenceLoad: targetPower.value,
+              referenceLoad: referenceLoad.value,
               // percentage: powerDrop.value.percentage, 
               timeOfDrop: new Date().toISOString(),
               calType: localStorage.getItem(settings.LoadDropOption)

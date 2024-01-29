@@ -28,6 +28,7 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
 
     const powerSampleArr = ref<string[]>([]);
     const powerTarget = ref(0);
+    const referencePower = ref(0);
 
     const powerDrop = ref<powerDropType>({
         drop: 0, status: false, percentage: 0
@@ -36,6 +37,7 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
     watch(powerSampleArr, (arr) => {
         if(arr.length >= import.meta.env.VITE_POWER_SAMPLE_SIZE) {
             powerTarget.value = getAverage(arr);
+            referencePower.value = powerTarget.value;
             // powerSampleArr.value = [];
             powerSampleArr.value.shift(); // remove the first/oldest element from the array
         }
@@ -109,6 +111,7 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
 
         if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
             powerTarget.value = parseFloat(declaredPower);
+            referencePower.value = powerTarget.value;
         }else{
             powerSampleArr.value.push(val.mw);
         }
@@ -122,8 +125,9 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
     })
 
     const targetPower = computed(() => powerTarget.value);
+    const referenceLoad = computed(() => referencePower.value);
 
-  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower,
+  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad,
                 set, disconnected, connect, checkConnection, acknowledgePowerDrop 
             }
 })
