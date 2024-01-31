@@ -1,14 +1,14 @@
 <template>
     <div style="margin-right: auto; margin-left: auto; width:100%">
-        <table border="1" class="table" style="width: 100%; font-weight: bold;">
-            <thead style="font-weight:bold">
-                <td><b>S/N</b></td>
-                <th><b>STATION</b></th>
-                <th><b>PRE-CONTINGENCY(MW)</b></th>
-                <th><b>LOAD DROP(MW)(%drop)</b></th>
-                <th><b>POST-CONTINGENCY(%drop)</b></th>
-                <th><b>CALCULATION TYPE</b></th>
-                <th><b>TIME OF DROP</b></th>
+        <table border="1" class="table" style="width: 100%; font-weight: bold; position:relative;">
+            <thead style="font-weight:bold;">
+                <td style="position: sticky; top: 0; background-color: grey;"><b>S/N</b></td>
+                <th style="position: sticky; top: 0; background-color: grey;"><b>STATION</b></th>
+                <th style="position: sticky; top: 0; background-color: grey;"><b>PRE-CONTINGENCY(MW)</b></th>
+                <th style="position: sticky; top: 0; background-color: grey;"><b>LOAD DROP(MW)(%drop)</b></th>
+                <th style="position: sticky; top: 0; background-color: grey;"><b>POST-CONTINGENCY(%drop)</b></th>
+                <th style="position: sticky; top: 0; background-color: grey;"><b>CALCULATION TYPE</b></th>
+                <th style="position: sticky; top: 0; background-color: grey;"><b>TIME OF DROP</b></th>
             </thead>
             <tbody>
                 <tr v-if="loadDrops.length > 0" v-for="(loadDrop, i) in loadDrops">
