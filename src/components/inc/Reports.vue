@@ -4,9 +4,9 @@
             <thead style="font-weight:bold">
                 <td><b>S/N</b></td>
                 <th><b>STATION</b></th>
-                <th><b>LOAD(Mw)</b></th>
-                <th><b>PREVIOUS LOAD(%drop)</b></th>
-                <th><b>REFERENCE LOAD(%drop)</b></th>
+                <th><b>PRE-CONTINGENCY(MW)</b></th>
+                <th><b>LOAD DROP(MW)(%drop)</b></th>
+                <th><b>POST-CONTINGENCY(%drop)</b></th>
                 <th><b>CALCULATION TYPE</b></th>
                 <th><b>TIME OF DROP</b></th>
             </thead>
@@ -14,9 +14,9 @@
                 <tr v-if="loadDrops.length > 0" v-for="(loadDrop, i) in loadDrops">
                     <td class="center">{{ i+1 }}</td>
                     <td class="center">{{ loadDrop.station.name }}</td>
-                    <td class="center">{{ loadDrop.load }}</td>
-                    <td class="center">{{ loadDrop.previousLoad }}({{ loadDrop.prevLoadPercentage }}%)</td>
-                    <td class="center">{{ loadDrop.referenceLoad }}({{ loadDrop.refLoadPercentage }}%)</td>
+                    <td class="center">{{ loadDrop.referenceLoad }}MW</td>
+                    <td class="center">{{ loadDrop.load }}MW({{ loadDrop.refLoadPercentage }}%)</td>
+                    <td class="center">{{ loadDrop.previousLoad }}MW({{ loadDrop.prevLoadPercentage }}%)</td>
                     <td class="center">{{ loadDrop.calculationType }}</td>
                     <td class="center">{{ loadDrop.timeOfDrop }}</td>
                 </tr>
