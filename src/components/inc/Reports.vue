@@ -1,6 +1,6 @@
 <template>
-    <div style="margin-right: auto; margin-left: auto; width:100%">
-        <table border="1" class="table" style="width: 100%; font-weight: bold; position:relative;">
+    <div style="margin-right: auto; margin-left: auto; width:100%; height:700px; overflow: scroll;">
+        <table border="1" class="table" style="width: 100%; font-weight: bold; position:relative; ">
             <thead style="font-weight:bold;">
                 <td style="position: sticky; top: 0; background-color: grey;"><b>S/N</b></td>
                 <th style="position: sticky; top: 0; background-color: grey;"><b>STATION</b></th>
@@ -10,7 +10,7 @@
                 <th style="position: sticky; top: 0; background-color: grey;"><b>CALCULATION TYPE</b></th>
                 <th style="position: sticky; top: 0; background-color: grey;"><b>TIME OF DROP</b></th>
             </thead>
-            <tbody>
+            <tbody style="height:50px;">
                 <tr v-if="loadDrops.length > 0" v-for="(loadDrop, i) in loadDrops">
                     <td class="center">{{ i+1 }}</td>
                     <td class="center">{{ loadDrop.station.name }}</td>
