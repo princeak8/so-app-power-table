@@ -34,6 +34,9 @@
         top: 0;
         background-color: #FFF;
     }
+    table th b {
+        font-weight: bolder;
+    }
 </style>
 
 <script setup lang="ts">
