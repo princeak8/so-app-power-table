@@ -6,7 +6,7 @@
                 <th><b>STATION</b></th>
                 <th><b>PRE-CONTINGENCY(MW)</b></th>
                 <th><b>LOAD DROP(MW)(%drop)</b></th>
-                <th><b>POST-CONTINGENCY(%drop)</b></th>
+                <th><b>POST-CONTINGENCY(%)</b></th>
                 <th><b>CALCULATION TYPE</b></th>
                 <th><b>TIME OF DROP</b></th>
             </thead>
