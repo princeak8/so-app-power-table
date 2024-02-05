@@ -36,8 +36,10 @@ export const omotoshoStore = defineStore(storeId, () => {
         let arr = powerSampleArr.value;
         let SampleSize = (inStorage(settings.SampleSize)) ? storage(settings.SampleSize) : VITE_POWER_SAMPLE_SIZE;
         if(arr.length >= SampleSize) {
+            
             powerTarget.value = getAverage(arr);
             referencePower.value = powerTarget.value;
+            // console.log('sample arrays:', arr, powerTarget.value);
             // powerSampleArr.value = [];
             powerSampleArr.value.shift(); // remove the first/oldest element from the array
         }
@@ -116,7 +118,6 @@ export const omotoshoStore = defineStore(storeId, () => {
         // checking for sudden power drop below the threshold
         let loadDropOption = localStorage.getItem(settings.LoadDropOption);
         let declaredPower = localStorage.getItem(storeId);
-
         if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
             powerTarget.value = parseFloat(declaredPower);
             referencePower.value = powerTarget.value;
@@ -139,8 +140,9 @@ export const omotoshoStore = defineStore(storeId, () => {
 
     const targetPower = computed(() => powerTarget.value);
     const referenceLoad = computed(() => referencePower.value);
+    const sampleArr = computed(() => powerSampleArr.value);
 
-  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad,
+  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad, sampleArr,
                 disconnected, connect, checkConnection, acknowledgePowerDrop 
             }
 })

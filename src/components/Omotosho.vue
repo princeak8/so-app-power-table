@@ -28,7 +28,7 @@ import { stationId, settings } from '@/enums';
 
     const stationStore = omotoshoStore();
     const storeId = stationStore.$id;
-    const { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad } = storeToRefs(stationStore)
+    const { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad, sampleArr } = storeToRefs(stationStore)
     const declaredPower = ref(localStorage.getItem(storeId));
     const edit = ref(false);
     const powerDropIgnored = ref(inStorage('ignore-'+storeId) && storage('ignore-'+storeId) == '1');
@@ -43,6 +43,7 @@ import { stationId, settings } from '@/enums';
     const emits = defineEmits(['emitTotal', 'resetTotal', 'startAlarm', 'stopAlarm', 'saveLoadDrop', 'acknowledge']);
 
     watch(() => powerDrop.value, (powerDropped) => {
+      // console.log('power dropped', powerDropped, sampleArr);
       if(powerDropped.status) {
           emits('startAlarm');
           const data = {

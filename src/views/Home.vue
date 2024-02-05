@@ -69,7 +69,7 @@
         const url = "http://localhost:3002/api/load_drop/save";
         axios.post(url, data)
         .then((res) => {
-            console.log("response:", res);
+            // console.log("response:", res);
         })
         .catch((err) => {
             console.log("error:", err.response.data.error);
