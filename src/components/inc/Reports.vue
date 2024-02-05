@@ -15,8 +15,9 @@
                     <td class="center">{{ i+1 }}</td>
                     <td class="center">{{ loadDrop.station.name }}</td>
                     <td class="center">{{ loadDrop.referenceLoad }}MW</td>
-                    <td class="center">{{ loadDrop.load }}MW({{ loadDrop.refLoadPercentage }}%)</td>
-                    <td class="center">{{ loadDrop.previousLoad }}MW({{ loadDrop.prevLoadPercentage }}%)</td>
+                    <td class="center">{{ (loadDrop.referenceLoad - loadDrop.load).toFixed(2) }}MW({{ loadDrop.refLoadPercentage }}%)</td>
+                    <td class="center">{{ loadDrop.load }}MW</td>
+                    <!-- td class="center"{{ loadDrop.previousLoad }}MW({{ loadDrop.prevLoadPercentage }}%)</td> -->
                     <td class="center">{{ loadDrop.calculationType }}</td>
                     <td class="center">{{ loadDrop.timeOfDrop }}</td>
                 </tr>
