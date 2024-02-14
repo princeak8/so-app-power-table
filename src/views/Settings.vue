@@ -7,6 +7,15 @@
 
         <table class="table-bordered">
             <tr style="padding-top: 2em; border: 1;">
+                <td style="width: 40%;" class="table-column">Maximum allowed Load Drop(MW)</td>
+                <td style="width: 40%;" class="table-column">
+                    <span v-if="editTarget != settings.MaxLoadDrop">{{ maxLoadDrop }}</span>
+                    <input class="form-control" v-if="editTarget == settings.MaxLoadDrop" v-model='editValue' />
+                </td>
+                <SettingsButtons :editTarget="editTarget" :value="settings.MaxLoadDrop" @emitSave="save" @emitsCancel="cancel" @emitsEdit="edit" />
+            </tr>
+
+            <tr style="padding-top: 2em; border: 1;">
                 <td style="width: 40%;" class="table-column">Maximum Percentage Load Drop</td>
                 <td style="width: 40%;" class="table-column">
                     <span v-if="editTarget != settings.LoadDrop">{{ loadDrop }}</span>
@@ -54,7 +63,7 @@
     // import { save as saveToStorage } from "@/services/DbService";
     import { settings } from '@/enums';
     import SettingsButtons from '../components/inc/SettingsButtons.vue';
-    const { VITE_POWER_SAMPLE_SIZE, VITE_MAX_LOAD_DROP_THRESHOLD } = import.meta.env;
+    const { VITE_POWER_SAMPLE_SIZE, VITE_MAX_LOAD_DROP_THRESHOLD, VITE_MAX_LOAD_DROP } = import.meta.env;
     // import "bootstrap/dist/css/bootstrap.min.css";
     // import "bootstrap";
 
@@ -62,12 +71,15 @@
 
     if(localStorage.getItem(settings.LoadDrop) == null) localStorage.setItem(settings.LoadDrop, VITE_MAX_LOAD_DROP_THRESHOLD.toString());
 
+    if(localStorage.getItem(settings.MaxLoadDrop) == null) localStorage.setItem(settings.MaxLoadDrop, VITE_MAX_LOAD_DROP.toString());
+
     if(localStorage.getItem(settings.SampleSize) == null) localStorage.setItem(settings.SampleSize, VITE_POWER_SAMPLE_SIZE.toString());
     
     if(localStorage.getItem(settings.LoadDropOption) == null) localStorage.setItem(settings.LoadDropOption, settings.AveragePower);
 
     let editTarget = ref('');
     let editValue = ref();
+    let maxLoadDrop = ref(localStorage.getItem(settings.MaxLoadDrop));
     let loadDrop = ref(localStorage.getItem(settings.LoadDrop));
     let sampleSize = ref(localStorage.getItem(settings.SampleSize))
     let calculationOption = ref(localStorage.getItem(settings.LoadDropOption));
@@ -93,6 +105,7 @@
 
     const updateData = (key: string) => {
         switch(key) {
+            case settings.MaxLoadDrop : maxLoadDrop.value = localStorage.getItem(settings.MaxLoadDrop); break;
             case settings.LoadDrop : loadDrop.value = localStorage.getItem(settings.LoadDrop); break;
             case settings.SampleSize : sampleSize.value = localStorage.getItem(settings.SampleSize); break;
             case settings.LoadDropOption : calculationOption.value = localStorage.getItem(settings.LoadDropOption);

@@ -44,6 +44,7 @@ export enum stationId {
 
 export enum settings {
     LoadDrop = 'load-drop',
+    MaxLoadDrop = 'max-load-drop',
     SampleSize = 'sample-size',
     LoadDropOption = 'load-drop-option',
     AveragePower = 'average-power',

@@ -26,6 +26,8 @@ export const olorunsogoStore = defineStore(storeId, () => {
     const powerSampleArr = ref<string[]>([]);
     const powerTarget = ref(0);
     const referencePower = ref(0);
+    const currPower = ref(0);
+    const prevPower = ref(0);
 
     const powerDrop = ref<powerDropType>({
         drop: 0, status: false, percentage: 0
@@ -122,8 +124,11 @@ export const olorunsogoStore = defineStore(storeId, () => {
             powerSampleArr.value.push(val.mw);
         }
 
+        prevPower.value = currPower.value;
+        currPower.value = parseFloat(val.mw);
+
         // checking for sudden power drop below the threshold
-        let drop = checkPowerDrop(powerTarget.value, parseFloat(val.mw), storeId);
+        let drop = checkPowerDrop(powerTarget.value, parseFloat(val.mw), prevPower.value, storeId);
         if(drop) powerDrop.value = drop;
         if(drop?.status) {
             powerSampleArr.value = []; // clear the sample array if load drop is flagged
@@ -137,8 +142,9 @@ export const olorunsogoStore = defineStore(storeId, () => {
 
     const targetPower = computed(() => powerTarget.value);
     const referenceLoad = computed(() => referencePower.value);
+    const prevLoad = computed(() => prevPower.value);
 
-  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, mergedVals, targetPower, referenceLoad,
+  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, mergedVals, targetPower, referenceLoad, prevLoad,
                 disconnected, connect, checkConnection, acknowledgePowerDrop 
             }
 })

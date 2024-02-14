@@ -26,6 +26,9 @@ export const afamIVStore = defineStore(storeId, () => {
     const powerTarget = ref(0);
     const referencePower = ref(0);
 
+    const currPower = ref(0);
+    const prevPower = ref(0);
+
     const powerDrop = ref<powerDropType>({
         drop: 0, status: false, percentage: 0
     })
@@ -52,6 +55,9 @@ export const afamIVStore = defineStore(storeId, () => {
         // console.log("Load Drop Option:", loadDropOption);
         let declaredPower = localStorage.getItem(storeId);
 
+        prevPower.value = currPower.value;
+        currPower.value = mw.value.pwr;
+
         // console.log(`${loadDropOption} && ${loadDropOption}==${settings.DeclaredPower} && ${declaredPower}`);
         if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
             powerTarget.value = parseFloat(declaredPower);
@@ -60,7 +66,7 @@ export const afamIVStore = defineStore(storeId, () => {
             powerSampleArr.value.push(mw.value.pwr);
         }
         // checking for sudden power drop below the threshold
-        let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), storeId);
+        let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), prevPower.value, storeId);
         // console.log('power drop target:', powerTarget.value);
         if(drop) powerDrop.value = drop;
         if(drop?.status) {
@@ -101,12 +107,13 @@ export const afamIVStore = defineStore(storeId, () => {
     const vals = computed(() => values(mw.value, mx.value, kv.value));
     const targetPower = computed(() => powerTarget.value);
     const referenceLoad = computed(() => referencePower.value);
+    const prevLoad = computed(() => prevPower.value);
     const timeSinceLastConnection = computed(() => {
         return (lastConnectedTime.value != undefined) ? Math.abs((currentTime() - lastConnectedTime.value)) : false;
     })
 
   return { 
-            station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad,
+            station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad, prevLoad,
             set, disconnected, connect, checkConnection, acknowledgePowerDrop 
         }
 })

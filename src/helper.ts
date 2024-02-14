@@ -141,13 +141,17 @@ export const lift = (storeId: string) => {
 //use max_load_drop_threshold, which is a percentage, to get the percentage threshold from the target
 // the target is the value that will serve as a reference from which power drop percentage is calculated
 // the target can either be gottrn from sampled incoming data or from a set value in sqlite
-export const checkPowerDrop = (target: number, power: number, storeId: string = '') => {
+export const checkPowerDrop = (target: number, power: number, prevPower: number, storeId: string = '') => {
     if((!inStorage('ignore-'+storeId) || storage('ignore-'+storeId) != '1') && target > 0) {
         let maxThreshold = (localStorage.getItem(settings.LoadDrop) == null) ?
                             import.meta.env.VITE_MAX_LOAD_DROP_THRESHOLD : localStorage.getItem(settings.LoadDrop)
+        let maxLoadDrop = (localStorage.getItem(settings.MaxLoadDrop) == null) ?
+                            import.meta.env.VITE_MAX_LOAD_DROP : localStorage.getItem(settings.MaxLoadDrop)
         const dropTarget = (maxThreshold/100) * target;
         const diff = target - power;
-        if(diff > dropTarget) {
+        const drop = prevPower - power;
+        console.log(`${storeId}: `, drop);
+        if((diff > dropTarget) || drop >= maxLoadDrop) {
             const percentage = (diff/target) * 100;
             return {drop: diff, percentage, status: true};
         }

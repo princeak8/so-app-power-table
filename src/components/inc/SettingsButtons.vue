@@ -26,7 +26,7 @@
         emits('emitsCancel');
     }
 
-    const edit = (val) => {
+    const edit = (val:any) => {
         emits('emitsEdit', val);
     }
   
