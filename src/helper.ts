@@ -150,7 +150,7 @@ export const checkPowerDrop = (target: number, power: number, prevPower: number,
         const dropTarget = (maxThreshold/100) * target;
         const diff = target - power;
         const drop = prevPower - power;
-        console.log(`${storeId}: `, drop);
+        // console.log(`${storeId}: `, drop);
         if((diff > dropTarget) || drop >= maxLoadDrop) {
             const percentage = (diff/target) * 100;
             return {drop: diff, percentage, status: true};
