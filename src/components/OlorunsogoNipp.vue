@@ -79,7 +79,7 @@ import { stationId, settings } from '@/enums';
         stationStore.acknowledgePowerDrop();
         emits('stopAlarm');
         const data = {
-            identifier: station.value.id, 
+            identifier: storeId, 
             acknowledgedAt: new Date().toISOString()
         }
         emits('acknowledge', data);

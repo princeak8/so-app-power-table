@@ -66,7 +66,7 @@
         //     "timeOfDrop": new Date().toISOString(),
         //     "calType": "average-power"
         // }
-        const url = "http://localhost:3002/api/load_drop/save";
+        const url = `${import.meta.env.VITE_DB_URL}load_drop/save`;
         axios.post(url, data)
         .then((res) => {
             // console.log("response:", res);
@@ -81,7 +81,7 @@
         //     "identifier" : "gbarain",  
         //     "acknowledgedAt": "2024-01-10 12:17:03"
         // }
-        const url = "http://localhost:3002/api/load_drop/acknowledge_station";
+        const url = `${import.meta.env.VITE_DB_URL}load_drop/acknowledge_station`;
         axios.post(url, data)
         .then((res) => {
             console.log("response:", res);
