@@ -58,10 +58,10 @@ import { ref, watch, onBeforeMount } from 'vue';
           }
       }
 
-      ws.on('error', async (error) => {
+      ws.onerror = async (error) => {
           console.log('Web Socket Error:', error);
           // await wait(5000);
-          connect();
+          // connect();
       }
 
       ws.onclose = async (event: any) => {

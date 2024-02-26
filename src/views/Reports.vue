@@ -70,7 +70,7 @@
     })
 
     const latestDrops = async () => {
-        const url = "http://localhost:3002/api/load_drop/latest"
+        const url = `${import.meta.env.VITE_DB_URL}load_drop/latest`
         await axios.get(url)
               .then((res) => {
                     // console.log('latest drops:', res.data);
@@ -82,7 +82,7 @@
     const search = async () => {
         console.log('start date: ',startDate.value);
         if(startDate.value != undefined) {
-            let url = `http://localhost:3002/api/load_drop/range?start=${startDate.value}`;
+            let url = `${import.meta.env.VITE_DB_URL}load_drop/range?start=${startDate.value}`;
             if(endDate.value != undefined) url += `&end=${endDate.value}`;
             await axios.get(url)
                 .then((res) => {
