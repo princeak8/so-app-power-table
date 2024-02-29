@@ -49,6 +49,8 @@
     import stationComponents from '@/stationComponents';
     import axios from "axios";
     import { type saveDropData, type acknowledgeStationData } from "@/types";
+    import { inStorage, storage } from '@/localStorage';
+    import { settings } from '@/enums';
 
     const stationsTotal= ref<Record<string, any>>({});
     const alarm = ref<HTMLAudioElement | null>(null);
@@ -66,6 +68,7 @@
         //     "timeOfDrop": new Date().toISOString(),
         //     "calType": "average-power"
         // }
+        data.calType = (inStorage(settings.LoadDropOption)) ? String(storage(settings.LoadDropOption)) : String(import.meta.env.VITE_DB_CAL_TYPE);
         const url = `${import.meta.env.VITE_DB_URL}load_drop/save`;
         axios.post(url, data)
         .then((res) => {
