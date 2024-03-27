@@ -2,7 +2,11 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { stationStore, formatStreamedData } from "@/helper";
 import { checkConnections, disconnect } from './connectionHelpers';
-import { ref, watch, onBeforeMount } from 'vue';
+import { ref, watch, onBeforeMount, onMounted } from 'vue';
+import axios from "axios";
+import { settings } from '@/enums';
+import { retrieveLoadDropsFromStorage } from '@/helper';
+import { inStorage, putInStorage, storage } from './localStorage';
 
   let connected = ref(false);
   let intervalId = 0;
@@ -27,7 +31,7 @@ import { ref, watch, onBeforeMount } from 'vue';
 
       const ws = new WebSocket(import.meta.env.VITE_SOCKET_URL);
 
-      ws.onmessage = (msg) => {
+      ws.onmessage = async (msg) => {
           try{
               const fMsg = JSON.parse(msg.data);
               // if(fMsg.id=='odukpaniNippPs') console.log('fmsg:', fMsg);
@@ -82,6 +86,71 @@ import { ref, watch, onBeforeMount } from 'vue';
     }, 10000);
   }
 
+  const testDB =async () => {
+    const url = `${import.meta.env.VITE_DB_URL}load_drop/latest`;
+    return await axios.get(url)
+    .then((res) => {
+        return true;
+    })
+    .catch((err) => {
+      return false;
+    });
+  }
+
+  const checkAndUpdateDB = async () => {
+    setInterval(async () => {
+      // console.log('checking..');
+      if(inStorage(settings.LoadDropsData)) { // if there's loadDropsData key in the localstorage
+          let loadDrops = retrieveLoadDropsFromStorage(); // retrieve the data from localstorage
+          if(loadDrops.length > 0) { // if the data is not empty
+              await updateDB(loadDrops);
+          }else{
+              // console.log('no load drops:',loadDrops);
+          }
+      }else{
+          // console.log('not in storage');
+      }
+    }, 30000);
+  }
+
+  async function updateDB(loadDrops:any) {
+      let dbOk = await testDB(); // test if the DB is going
+      if(dbOk) {
+          // console.log('DB is okay');
+          // let savedIndexes: number[] = [] // indexes of load drop data that has been saved successfuly
+          let unSavedData: any[] = [];
+          // loadDrops.forEach(async (loadDropData:any, index:number) => {
+          for(let i=0; i < loadDrops.length; i++) {
+              let loadDropData = loadDrops[i];
+              loadDropData.calType = (inStorage(settings.LoadDropOption)) ? String(storage(settings.LoadDropOption)) : String(import.meta.env.VITE_DB_CAL_TYPE);
+              const url = `${import.meta.env.VITE_DB_URL}load_drop/save`;
+              try{
+                  await axios.post(url, loadDropData);
+                  // console.log('load drops', loadDrops);
+                  // console.log('saved successfuly');
+                  // console.log(savedIndexes);
+              }catch(err) {
+                  unSavedData.push(loadDropData);
+                  console.log("error:", err);
+              }
+          }
+          console.log('unSavedData:', unSavedData);
+          putInStorage(settings.LoadDropsData, JSON.stringify(unSavedData));
+          
+          // if(savedIndexes.length > 0) {
+          //     console.log('deleting saved load drops');
+          //     // while(savedIndexes.length > 0) {
+          //     savedIndexes.forEach(async (index) => await loadDrops.splice(index, 1));
+          //     console.log('load drops', loadDrops);
+          //     putInStorage(settings.LoadDropsData, JSON.stringify(loadDrops))
+          // }else{
+          //   console.log('savedIndexes:', savedIndexes);
+          // }
+      }else{
+          // console.log('DB is not OK');
+      }
+  }
+
   function connectionStopped () {
       connected.value = false;
       disconnect();
@@ -93,7 +162,11 @@ import { ref, watch, onBeforeMount } from 'vue';
       connect();
   })
 
-  
+  onMounted(async() => {
+      // console.log('check and update DB');
+      checkAndUpdateDB();
+      // console.log(storage(settings.LoadDropsData));
+  })
 
 
   // const formattedData = formatStreamedData(rawData.value);

@@ -100,7 +100,8 @@ import { stationId, settings } from '@/enums';
     }
 
     const saveDeclaredPower = () => {
-      if(declaredPower.value) localStorage.setItem(storeId, declaredPower.value.toString());
+      if(!declaredPower.value) declaredPower.value = '';
+      localStorage.setItem(storeId, declaredPower.value.toString());
       edit.value = false;
     }
 </script>

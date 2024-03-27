@@ -7,7 +7,13 @@
             </div>
 
             <div>
-                <h2 style="margin-bottom: 3%; margin-top: 3%;">{{ title }}</h2>
+                <div style="margin-bottom: 3%; margin-top: 3%; display: flex; flex-direction: row; justify-content: space-between;">
+                    <h2>{{ title }}</h2>
+                    <button type="button" @click="reload">
+                        <span v-if="!reloading">RELOAD</span>
+                        <img v-if="reloading" src="reload.gif" width="50" height="30" />
+                    </button>
+                </div>
                 <div style="display: flex; flex-direction: row;">
                     <p>Start Date:<input type="date" v-model="startDate" :max="maxStartDate" /></p>
                     <p style="margin-left: 5%; margin-right: 2%;">End Date: <input type="date" v-model="endDate" :max="maxEndDate" :min="minEndDate" :disabled="!endDateActive" /></p>
@@ -61,6 +67,7 @@
     let minEndDate = ref(startDate);
     let maxStartDate = ref(new Date().toJSON().split('T')[0]);
     let endDateActive = ref(false);
+    let reloading = ref(false);
     
     let header:any = null;
     let sticky:any = null;
@@ -77,6 +84,18 @@
                     loadDrops.value = res.data;
               })
               .catch((err) => console.log('Error:', err));
+    }
+
+    const reload =async () => {
+        const url = `${import.meta.env.VITE_DB_URL}load_drop/latest`
+        reloading.value = true;
+        await axios.get(url)
+            .then((res) => {
+                // console.log('latest drops:', res.data);
+                loadDrops.value = res.data;
+            })
+            .catch((err) => console.log('Error:', err));
+        reloading.value = false;
     }
 
     const search = async () => {

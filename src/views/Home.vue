@@ -49,8 +49,9 @@
     import stationComponents from '@/stationComponents';
     import axios from "axios";
     import { type saveDropData, type acknowledgeStationData } from "@/types";
-    import { inStorage, storage } from '@/localStorage';
+    import { inStorage, storage, putInStorage } from '@/localStorage';
     import { settings } from '@/enums';
+    import { retrieveLoadDropsFromStorage } from '@/helper';
 
     const stationsTotal= ref<Record<string, any>>({});
     const alarm = ref<HTMLAudioElement | null>(null);
@@ -75,8 +76,16 @@
             // console.log("response:", res);
         })
         .catch((err) => {
-            console.log("error:", err.response.data.error);
+            console.log("error saving load drop:", err);
+            storeLoadDropInStorage(data);
         })
+    }
+
+    function storeLoadDropInStorage(data:saveDropData) {
+        // console.log('storing load drop in storage');
+        let loadDrops = (inStorage(settings.LoadDropsData)) ? retrieveLoadDropsFromStorage() : [];
+        loadDrops.push(data);
+        putInStorage(settings.LoadDropsData, JSON.stringify(loadDrops));
     }
 
     function AcknowledgeStationIncidence(data: acknowledgeStationData) {
@@ -90,12 +99,12 @@
             console.log("response:", res);
         })
         .catch((err) => {
-            console.log("error:", err.response.data.error);
+            console.log("error:", err);
         })
     }
 
     function startAlarm() {
-        console.log('alarm');
+        // console.log('alarm');
         if (alarm.value) {
             alarm.value.play();
         }

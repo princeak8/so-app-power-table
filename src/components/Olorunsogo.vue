@@ -11,7 +11,7 @@
       <input v-if="edit" type="text" class="form-control" v-model="declaredPower" @blur="saveDeclaredPower" />
     </td>
     <StationPowerDropCols  :powerDropIgnored="powerDropIgnored" :powerDrop="powerDrop" 
-                  @emitAcknowledgeDrop="acknowledgeDrop" @emitIgnorePowerDrop="ignorePowerDrop" @emitLiftIgnore="liftIgnore"
+    @emitAcknowledgeDrop="acknowledgeDrop" @emitIgnorePowerDrop="ignorePowerDrop" @emitLiftIgnore="liftIgnore"
     />
   </tr>
 </template>
@@ -101,7 +101,8 @@ import { stationId, settings } from '@/enums';
     }
 
     const saveDeclaredPower = () => {
-      if(declaredPower.value) localStorage.setItem(storeId, declaredPower.value.toString());
+      if(!declaredPower.value) declaredPower.value = '';
+      localStorage.setItem(storeId, declaredPower.value.toString());
       edit.value = false;
     }
 </script>

@@ -48,5 +48,6 @@ export enum settings {
     SampleSize = 'sample-size',
     LoadDropOption = 'load-drop-option',
     AveragePower = 'average-power',
-    DeclaredPower = 'declared-power'
+    DeclaredPower = 'declared-power',
+    LoadDropsData = 'load-drops-data'
 }

@@ -249,3 +249,9 @@ export const formatInnerData = (rawSectionData: rawSectionType): sectionType | n
 export const currentTime = () => {
     return Math.round(new Date().getTime() / 1000);
 }
+
+export const retrieveLoadDropsFromStorage = () => {
+    let loadDropsString = storage(settings.LoadDropsData);
+    let loadDrops = (loadDropsString != null) ? JSON.parse(loadDropsString) : [];
+    return (loadDrops == null) ? [] : loadDrops;
+}
