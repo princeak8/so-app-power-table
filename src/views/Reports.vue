@@ -11,7 +11,7 @@
                     <h2>{{ title }}</h2>
                     <button type="button" @click="reload">
                         <span v-if="!reloading">RELOAD</span>
-                        <img v-if="reloading" src="reload.gif" width="50" height="30" />
+                        <img v-if="reloading" src="./reload.gif" width="50" height="30" />
                     </button>
                 </div>
                 <div style="display: flex; flex-direction: row;">
