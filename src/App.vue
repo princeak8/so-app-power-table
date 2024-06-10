@@ -43,16 +43,19 @@ import { inStorage, putInStorage, storage } from './localStorage';
               // if(fMsg.id=='olorunsogoLines') console.log('formatted message', fMsg);
               // console.log('formatted message', fMsg);
               // const formattedData = (fMsg.id == 'afamIv_vPs') ? formatStreamedData(getRawData()) : formatStreamedData(fMsg);
-              const formattedData = formatStreamedData(fMsg);
+
+              // const formattedData = formatStreamedData(fMsg);
+
+              // console.log(formattedData?.id);
               // if(formattedData?.id=='dadinKowaGs') console.log('formatted data', formattedData);
-              if(formattedData != null) {
+              if(fMsg != null) {
                   // if(formattedData?.id=='dadinKowaGs') console.log('formatted data', formattedData);
-                  const station = stationStore(formattedData.id);
+                  const station = stationStore(fMsg.id);
                   // if(formattedData?.id=='dadinKowaGs') console.log('dadinkowa station', station);
                   
                   if(station != undefined) {
                     // if(formattedData?.id=='dadinKowaGs') console.log('setting station');
-                      station.set(formattedData);
+                      station.set(fMsg);
                   }
                   MessageReceivedTime = Math.round(new Date().getTime() / 1000);
                   checkConnections();
