@@ -80,8 +80,8 @@
         const url = `${import.meta.env.VITE_DB_URL}load_drop/latest`
         await axios.get(url)
               .then((res) => {
-                    // console.log('latest drops:', res.data);
-                    loadDrops.value = res.data;
+                    //console.log('latest drops:', res.data);
+                    loadDrops.value = (res.data.data) ? res.data.data : res.data;
               })
               .catch((err) => console.log('Error:', err));
     }

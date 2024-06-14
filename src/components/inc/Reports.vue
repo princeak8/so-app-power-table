@@ -11,7 +11,7 @@
                 <th><b>TIME OF DROP</b></th>
             </thead>
             <tbody style="height:50px;">
-                <tr v-if="loadDrops.length > 0" v-for="(loadDrop, i) in loadDrops">
+                <tr v-if="loadDrops != undefined && loadDrops.length > 0" v-for="(loadDrop, i) in loadDrops">
                     <td class="center">{{ i+1 }}</td>
                     <td class="center">{{ loadDrop.station.name }}</td>
                     <td class="center">{{ loadDrop.referenceLoad }}MW</td>
@@ -41,7 +41,7 @@
 </style>
 
 <script setup lang="ts">
-    import { PropType } from 'vue';
+    import { type PropType } from 'vue';
     import { type loadDropData} from "../../types";
 
     const props = defineProps({
@@ -55,7 +55,7 @@
 
     // console.log(prevLoadPercentage);
 
-    const percentage = (firstVal, secondVal) => {
+    const percentage = (firstVal: number, secondVal: number) => {
         let diff = firstVal - secondVal;
         return ((diff/firstVal) * 100).toFixed(2);
     }
