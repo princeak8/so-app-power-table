@@ -59,6 +59,22 @@ export const getPower = (sections: sectionType[], absolute=false): powerValObjTy
     return {pwr: pwr.toFixed(2), status};
 }
 
+export const getZungeruPower = (sections: sectionType[]): powerValObjType => {
+    let pwr = 0;
+    let status = false;
+    sections.forEach((section) => {
+        let A = parseFloat(section.data.A.toString());
+        let V = parseFloat(section.data.V.toString());
+        if(!Number.isNaN(A) && !Number.isNaN(V)) {
+            // console.log('A:'+A + 'V', V);
+            status = true;
+            let mw = (Math.sqrt(3) * (A*V))/1000;
+            pwr += mw;
+        }
+    });
+    return {pwr: pwr.toFixed(2), status};
+}
+
 export const getMvar = (sections: sectionType[], absolute=false): mvarValObjType => {
     let pwr = 0;
     let status = false;

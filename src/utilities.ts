@@ -18,3 +18,13 @@ export const getAverage = (arr: string[]) => {
     })
     return parseFloat((sum/arr.length).toFixed(2));
 }
+
+export const getDate = (adjustOffset:boolean = true) => {
+    let date = new Date();
+    let timezoneOffset = date.getTimezoneOffset();
+    let adjustedOffset = timezoneOffset * -1;
+    // let lagosOffset = 120; // this is the offset for the Pacific Standard Time timezone
+    // let adjustedTime = new Date(date.getTime() + (lagosOffset + timezoneOffset) * 60 * 1000);
+    let adjustedDate = new Date(date.getTime() + adjustedOffset * 60 * 1000);
+    return adjustedDate;
+}

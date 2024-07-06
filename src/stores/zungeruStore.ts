@@ -2,7 +2,7 @@ import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 
 import { type dataType, type sectionType, type stationType, type powerDropType } from "@/types/index";
-import { initializeStation, currentTime, checkPowerDrop, getPower, getMvar, getVoltage } from '@/helper';
+import { initializeStation, currentTime, checkPowerDrop, getZungeruPower, getMvar, getVoltage } from '@/helper';
 import { stationId, settings } from '@/enums';
 import { values, getAverage } from '@/utilities';
 import { inStorage, storage } from '@/localStorage';
@@ -46,7 +46,7 @@ export const zungeruStore = defineStore(storeId, () => {
 
     function set (data: stationType) {
         stationStore.value = {...data};
-        mw.value = getPower(data.sections, true);
+        mw.value = getZungeruPower(data.sections);
         mx.value = getMvar(data.sections, true);
         kv.value = getVoltage(data.sections);
 

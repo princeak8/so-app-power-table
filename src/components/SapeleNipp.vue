@@ -25,6 +25,7 @@ import { inStorage, storage } from '@/localStorage';
 import { ignore, lift } from '@/helper';
 import StationPowerDropCols from './inc/StationPowerDropCols.vue';
 import { stationId, settings } from '@/enums';
+import { getDate } from '@/utilities';
 
     const stationStore = sapeleNippStore();
     const storeId = stationStore.$id;
@@ -51,7 +52,7 @@ import { stationId, settings } from '@/enums';
               previousLoad: (prevLoad.value==null) ? 0 : parseFloat(prevLoad.value),
               referenceLoad: referenceLoad.value,
               // percentage: powerDrop.value.percentage, 
-              timeOfDrop: new Date().toISOString(),
+              timeOfDrop: getDate().toISOString(),
               calType: localStorage.getItem(settings.LoadDropOption)
             }
             emits('saveLoadDrop', data);
