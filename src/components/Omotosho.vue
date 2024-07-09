@@ -46,7 +46,7 @@ import { getDate } from '@/utilities';
     watch(() => powerDrop.value, (powerDropped) => {
       // console.log('power dropped', powerDropped, sampleArr);
       if(powerDropped.status) {
-          emits('startAlarm');
+          if(powerDropIgnored.value == false) emits('startAlarm');
           const data = {
               powerStationId: station.value.id, 
               load: parseFloat(vals.value.mw), 

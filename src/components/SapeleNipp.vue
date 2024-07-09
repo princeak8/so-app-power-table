@@ -45,7 +45,8 @@ import { getDate } from '@/utilities';
 
     watch(() => powerDrop.value, (powerDropped) => {
       if(powerDropped.status) {
-          emits('startAlarm');
+          console.log('sapele NIPP ignored?', powerDropIgnored.value);
+          if(powerDropIgnored.value == false) emits('startAlarm');
           const data = {
               powerStationId: station.value.id, 
               load: parseFloat(vals.value.mw), 

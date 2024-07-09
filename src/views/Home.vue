@@ -104,7 +104,7 @@
     }
 
     function startAlarm() {
-        // console.log('alarm');
+        // console.log('alarm started');
         if (alarm.value) {
             alarm.value.play();
         }

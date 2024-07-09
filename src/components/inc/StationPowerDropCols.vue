@@ -1,5 +1,5 @@
 <template>
-    <td v-if="powerDrop.status">
+    <td v-if="powerDrop.status && !powerDropIgnored">
         <button type="button" @click="acknowledgeDrop()" class="button bg-green">Acknowledge</button>
         <button type="button" @click="ignorePowerDrop()" class="button bg-yellow">Ignore</button>
     </td>

@@ -45,7 +45,7 @@ import { getDate } from '@/utilities';
 
     watch(() => powerDrop.value, (powerDropped) => {
       if(powerDropped.status) {
-          emits('startAlarm');
+          if(powerDropIgnored.value == false) emits('startAlarm');
           const data = {
               powerStationId: stationId.OlorunsogoNipp, 
               load: parseFloat(vals.value.mw), 

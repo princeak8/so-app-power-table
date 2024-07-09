@@ -158,7 +158,8 @@ export const lift = (storeId: string) => {
 // the target is the value that will serve as a reference from which power drop percentage is calculated
 // the target can either be gottrn from sampled incoming data or from a set value in sqlite
 export const checkPowerDrop = (target: number, power: number, prevPower: number, storeId: string = '') => {
-    if((!inStorage('ignore-'+storeId) || storage('ignore-'+storeId) != '1') && target > 0) {
+    // if((!inStorage('ignore-'+storeId) || storage('ignore-'+storeId) != '1') && target > 0) {
+    if(target > 0) {
         let maxThreshold = (localStorage.getItem(settings.LoadDrop) == null) ?
                             import.meta.env.VITE_MAX_LOAD_DROP_THRESHOLD : localStorage.getItem(settings.LoadDrop)
         let maxLoadDrop = (localStorage.getItem(settings.MaxLoadDrop) == null) ?
