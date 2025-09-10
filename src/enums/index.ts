@@ -24,7 +24,7 @@ export enum stationId {
     ParasEnergy = 'parasEnergyPs',
     RiversIpp = 'riversIppPs',
     SapeleNipp = 'sapeleNipp',
-    SapeleSteam = 'sapeleSteam',
+    SapeleSteam = 'sapele',
     Shiroro = 'shiroroPs',
     Taopex = 'taopex',
     Transamadi = 'phMain',

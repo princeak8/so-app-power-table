@@ -63,12 +63,16 @@ export const getZungeruPower = (sections: sectionType[]): powerValObjType => {
     let pwr = 0;
     let status = false;
     sections.forEach((section) => {
-        let A = parseFloat(section.data.A.toString());
-        let V = parseFloat(section.data.V.toString());
-        if(!Number.isNaN(A) && !Number.isNaN(V)) {
+        let ampVal = (section?.data?.A) ? section.data.A : section.data.a;
+        let A = (ampVal) ? parseFloat(ampVal.toString()) : 0;
+
+
+        let voltageVal = (section?.data?.V) ? section.data.V : section.data.v;
+        let v = (voltageVal) ? parseFloat(voltageVal.toString()) : 0;
+        if(!Number.isNaN(A) && !Number.isNaN(v)) {
             // console.log('A:'+A + 'V', V);
             status = true;
-            let mw = (Math.sqrt(3) * (A*V))/1000;
+            let mw = (Math.sqrt(3) * (A*v))/1000;
             pwr += mw;
         }
     });
@@ -79,7 +83,8 @@ export const getMvar = (sections: sectionType[], absolute=false): mvarValObjType
     let pwr = 0;
     let status = false;
     sections.forEach((section) => {
-        let mx = parseFloat(section.data.mvar.toString());
+        let val = (section?.data?.mvar) ? section.data.mvar : section.data.mx;
+        let mx = (val) ? parseFloat(val.toString()) : 0;
         if(!Number.isNaN(mx)) {
             status = true;
             if(absolute) {
@@ -97,7 +102,8 @@ export const getVoltage = (sections: sectionType[]): voltageValObjType => {
     let status = false;
     let voltage = 0;
     sections.forEach((section) => {
-        let v = parseFloat(section.data.V.toString());
+        let val = (section?.data?.V) ? section.data.V : section.data.v;
+        let v = (val) ? parseFloat(val.toString()) : 0;
         if(!Number.isNaN(v)) {
             status = true;
             voltage = (v > voltage) ? v : voltage

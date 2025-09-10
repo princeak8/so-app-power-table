@@ -1,8 +1,11 @@
 export interface dataType {
     mw: number | string;
-    A: number | string;
-    V: number | string;
-    mvar: number | string;
+    A?: number | string;
+    a?: number | string;
+    V?: number | string;
+    v?: number | string;
+    mvar?: number | string;
+    mx?: number | string;
 }
 
 export interface sectionType {
