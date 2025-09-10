@@ -45,26 +45,26 @@ export const sapeleSteamStore = defineStore(storeId, () => {
     })
 
     function set (data: stationType) {
-        console.log('set Sapele1', data);
+        // console.log('set Sapele1', data);
         stationStore.value = {...data};
-        console.log('set Sapele4');
+        // console.log('set Sapele4');
         mw.value = getPower(data.sections, true);
-        console.log('set Sapele5');
+        // console.log('set Sapele5');
         mx.value = getMvar(data.sections, true);
-        console.log('set Sapele6');
+        // console.log('set Sapele6');
         kv.value = getVoltage(data.sections);
 
-        console.log('set Sapele3');
+        // console.log('set Sapele3');
 
         // checking for sudden power drop below the threshold
         let loadDropOption = localStorage.getItem(settings.LoadDropOption);
         let declaredPower = localStorage.getItem(storeId);
-        console.log('set Sapele2');
+        // console.log('set Sapele2');
 
         prevPower.value = currPower.value;
         currPower.value = mw.value.pwr;
 
-        console.log('set Sapele');
+        // console.log('set Sapele');
         if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
             powerTarget.value = parseFloat(declaredPower);
             referencePower.value = powerTarget.value;
