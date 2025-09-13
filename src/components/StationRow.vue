@@ -2,7 +2,7 @@
     <tr :class="[classes, { redBg: powerDrop.status }]">
       <td :class="classes" style="padding-left: 5px;">{{ sn }}</td>
       <td :class="[classes, { 'text-blue-500 clickable-cursor': showDetails }]" class="center cursor-pointer" @click="selectStation">{{ name }} </td>
-      <td :class="classes" class="center">{{ vals.mw }}one</td>
+      <td :class="classes" class="center">{{ vals.mw }}</td>
       <td :class="classes" class="center">{{ vals.mx }}</td>
       <td :class="classes" class="center">{{ vals.kv }}</td>
       <td class="center" :class="[classes, connectionStatusColor]">
