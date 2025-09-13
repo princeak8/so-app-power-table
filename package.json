@@ -2,6 +2,7 @@
   "name": "so-app-power-table",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "run-p type-check \"build-only {@}\" --",
     "test:unit": "vitest",
@@ -13,6 +14,7 @@
   "main": "background.js",
   "dependencies": {
     "@popperjs/core": "^2.11.8",
+    "@tailwindcss/vite": "^4.1.13",
     "@vue/cli-service": "^5.0.8",
     "axios": "^1.5.1",
     "bootstrap": "^5.3.2",
@@ -31,6 +33,7 @@
     "@vue/tsconfig": "^0.4.0",
     "jsdom": "^22.1.0",
     "npm-run-all2": "^6.0.6",
+    "tailwindcss": "^4.1.13",
     "typescript": "~5.2.0",
     "vite": "^4.4.9",
     "vitest": "^0.34.4",

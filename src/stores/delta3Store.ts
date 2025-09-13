@@ -45,6 +45,7 @@ export const delta3Store = defineStore(storeId, () => {
     })
 
     function set (data: stationType) {
+        // console.log("delta 3:", data);
         stationStore.value = {...data};
         mw.value = getPower(data.sections, true);
         mx.value = getMvar(data.sections, true);

@@ -21,11 +21,12 @@
                     <button type="button" @click="download"> Download </button>
                     <button type="button" @click="clear"> Clear </button>           
                 </div>
+                <input type="text" v-model="nameFilter" placeholder="filter name" style="margin-top: 0.5rem; margin-bottom: 0.5rem; height: 2rem;" />
                 
             </div>
         </div>
         <div class="content">
-            <Reports :loadDrops="loadDrops" />
+            <Reports :loadDrops="filteredLoadDrops" />
         </div>
     </div>
 </template>
@@ -52,13 +53,14 @@
 
 
 <script setup lang="ts">
-    import { ref, onBeforeMount, watch, onMounted } from 'vue';
+    import { ref, onBeforeMount, watch, onMounted, computed } from 'vue';
     // import { save as saveToStorage } from "@/services/DbService";
     import { settings } from '@/enums';
     const { VITE_POWER_SAMPLE_SIZE, VITE_MAX_LOAD_DROP_THRESHOLD } = import.meta.env;
     import axios from "axios";
     import Reports from "../components/inc/Reports.vue";
 
+    let nameFilter = ref('');
     let loadDrops = ref([]);
     let title = ref('latest Load Drops');
     let startDate = ref();
@@ -72,6 +74,19 @@
     
     let header:any = null;
     let sticky:any = null;
+
+    const filteredLoadDrops = computed(() => {
+        if (!nameFilter.value.trim()) {
+            return loadDrops.value;
+        }
+        
+        return loadDrops.value.filter((item: any) => {
+            // Adjust the property name based on your data structure
+            // Common property names might be: name, title, description, etc.
+            const nameToFilter = item.station.name;
+            return nameToFilter.toLowerCase().includes(nameFilter.value.toLowerCase());
+        });
+    });
 
     watch(startDate, (start) => {
         (start != undefined) ? endDateActive.value = true : endDateActive.value = false;
@@ -167,6 +182,7 @@
     const clear = async () => {
         startDate.value = undefined;
         endDate.value = undefined;
+        nameFilter.value = '';
         latestDrops();
     }
 

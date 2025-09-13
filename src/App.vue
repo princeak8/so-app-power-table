@@ -50,7 +50,7 @@ import { inStorage, putInStorage, storage } from './localStorage';
               // if(formattedData?.id=='dadinKowaGs') console.log('formatted data', formattedData);
               if(fMsg != null) {
                   // if(formattedData?.id=='dadinKowaGs') console.log('formatted data', formattedData);
-                  const station = stationStore(fMsg.id);
+                  const station = (fMsg.id) ? stationStore(fMsg.id) : stationStore(fMsg.name);
                   // if(formattedData?.id=='dadinKowaGs') console.log('dadinkowa station', station);
                   
                   if(station != undefined) {

@@ -1,12 +1,12 @@
 <template>
-  <tr :class="{redBg: powerDrop.status}">
-    <td style="padding-left: 5px;">{{ sn }}</td>
-    <td class="center">AFAM V</td>
-    <td class="center">{{ vals.mw }}</td>
-    <td class="center"> {{ vals.mx}} </td>
-    <td class="center"> {{ vals.kv }} </td>
-    <td class="center" :class="connectionStatusColor"> {{(isConnected) ? 'Connected' : (isConnectionLost) ? 'Connection Lost' : 'Not Connected'}} </td>
-    <td class="center">
+  <tr :class="classes, {redBg: powerDrop.status}">
+    <td :class="classes" style="padding-left: 5px;">{{ sn }}</td>
+    <td :class="classes" class="center">AFAM IV</td>
+    <td :class="classes" class="center">{{ vals.mw }}</td>
+    <td :class="classes" class="center"> {{ vals.mx}} </td>
+    <td :class="classes" class="center"> {{ vals.kv }} </td>
+    <td class="center" :class="classes, connectionStatusColor"> {{(isConnected) ? 'Connected' : (isConnectionLost) ? 'Connection Lost' : 'Not Connected'}} </td>
+    <td :class="classes" class="center">
       <span v-if="!edit" @click="editDeclaredPower">{{ declaredPower || '-' }}</span>
       <input v-if="edit" type="text" class="form-control" v-model="declaredPower" @blur="saveDeclaredPower" />
     </td>
@@ -28,14 +28,14 @@
 
 import { ref, computed, watch } from 'vue';
 import { storeToRefs } from 'pinia'
-import { afamVStore } from "@/stores/afamVStore"
+import { afamIVStore } from "@/stores/afamIVStore"
 import { inStorage, storage } from '@/localStorage';
 import { ignore, lift } from '@/helper';
 import StationPowerDropCols from './inc/StationPowerDropCols.vue'
 import { stationId, settings } from '@/enums';
 import { getDate } from '@/utilities';
 
-    const stationStore = afamVStore();
+    const stationStore = afamIVStore();
     const storeId = stationStore.$id;
     const { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad } = storeToRefs(stationStore)
     const declaredPower = ref(localStorage.getItem(storeId));
@@ -46,14 +46,15 @@ import { getDate } from '@/utilities';
 
     const props = defineProps({
         sn: Number,
-        isParent: Boolean
+        isParent: Boolean,
+        classes: String
     });
 
     const emits = defineEmits(['emitTotal', 'resetTotal', 'startAlarm', 'stopAlarm', 'saveLoadDrop', 'acknowledge']);
 
     watch(() => powerDrop.value, (powerDropped) => {
-      if(powerDropped.status) {
-        if(powerDropIgnored.value == false) emits('startAlarm');
+        if(powerDropped.status) {
+          if(powerDropIgnored.value == false) emits('startAlarm');
           const data = {
               powerStationId: station.value.id, 
               load: parseFloat(vals.value.mw), 
@@ -67,21 +68,33 @@ import { getDate } from '@/utilities';
         }
     })
 
+    const alarm = ref(false);
+
     const connectionStatusColor = computed(() => {
       return (isConnected.value) ? 'connected' : (isConnectionLost.value) ? 'connectionLost' : 'notConnected'
     })
 
-    watch(() => isConnected.value, (connected) => {
-      if(!connected) emits('resetTotal', station.value.id);
-    })
-
     watch(vals, (currentVals) => {
-      if(currentVals.mw != '' && currentVals.mw != '-') {
+        if(currentVals.mw != '' && currentVals.mw != '-') {
             prevLoad.value = currLoad.value;
             currLoad.value = currentVals.mw;
             emits('emitTotal', station.value.id, currentVals.mw);
-      }
-      // if(powerDrop.value.status) emits('startAlarm');
+        }
+        // if(powerDrop.value.status) {
+        //     emits('startAlarm');
+        //     const data = {
+        //       powerStationId: storeId, 
+        //       load: currentVals.mw, 
+        //       percentage: powerDrop.value.percentage, 
+        //       timeOfDrop: new Date().toISOString(),
+        //       calType: localStorage.getItem(settings.LoadDropOption)
+        //     }
+        //     emits('saveLoadDrop', data);
+        // }
+    })
+
+    watch(() => isConnected.value, (connected) => {
+      if(!connected) emits('resetTotal', station.value.id);
     })
 
     const acknowledgeDrop = () => {
@@ -114,6 +127,15 @@ import { getDate } from '@/utilities';
       localStorage.setItem(storeId, declaredPower.value.toString());
       edit.value = false;
     }
+    
+    // watch(power, (prevPwr, currPwr) => {
+    //   console.log(currPwr);
+    //     console.log(`${prevPwr.pwr} - ${currPwr.pwr}`);
+    //     if((prevPwr.pwr - currPwr.pwr) >= import.meta.env.VITE_MAX_LOAD_DROP_THRESHOLD) {
+    //         alarm.value = true;
+    //     }
+    // })
+
 </script>
 
 <style scoped>

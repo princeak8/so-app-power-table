@@ -1,66 +1,57 @@
 <template>
-    <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold text-green-800 text-center mb-6">GENERATION LOSS DETECTION SYSTEM</h1>
+    <!-- <TheWelcome /> -->
+    <div class="content-container">
+        <h1 style="color: #355E3B; font-weight: bold;">GENERATION LOSS DETECTION SYSTEM</h1>
 
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold">Power Stations</h2>
-            <h2 class="text-xl font-bold">Total: {{ total.toLocaleString('en-US') }}MW</h2>
+        <h1 style="margin:2px; padding: 0; display: flex; flex-direction: row; justify-content: space-between;">
+            <b>Power Stations</b>
+            <b>Total: {{ total.toLocaleString('en-US') }}MW</b>
             <audio ref="alarm" src="alarm/alert-alarm-1.wav"></audio>
-        </div>
+            <!-- <button @click="startAlarm">Start Alarm</button> -->
+            <!-- <button @click="saveLoadDrop">Save Incidence</button> -->
+            <!-- <p>{{ Date() }}</p> -->
+            <!-- <button @click="AcknowledgeIncidence">Acknowledge Incidence</button>  -->
+        </h1>
 
-        <table class="w-full border-collapse border border-gray-300 font-bold">
+        <table border="1" class="table table-bordered" style="width: 100%; font-weight: bold;">
             <thead>
-                <tr class="bg-black">
-                    <th class="border border-gray-300 p-2">S/N</th>
-                    <th class="border border-gray-300 text-red-800 p-2">Station</th>
-                    <th class="border border-gray-300 p-2">Power(MW)</th>
-                    <th class="border border-gray-300 p-2">REACTIVE POWER (MVar)</th>
-                    <th class="border border-gray-300 p-2">VOLTAGE (kV)</th>
-                    <th class="border border-gray-300 p-2">STATUS</th>
-                    <th class="border border-gray-300 p-2">Declared Load</th>
+                <tr>
+                    <th>S/N</th>
+                    <th>Station</th>
+                    <th>Power(MW)</th>
+                    <th>REACTIVE POWER (MVar)</th>
+                    <th>VOLTAGE (kV)</th>
+                    <th>STATUS</th>
+                    <th>Declared Load</th>
                 </tr>
             </thead>
             <tbody>
-                <StationRow
-                    v-for="(station, i) in stationStores"
-                    :key="i"
-                    :sn="i + 1"
-                    :name="station.name"
-                    :store="station.store()"
-                    :showDetails="station.showDetails"
-                    classes="border border-gray-300 p-2"
-                    @emitTotal="getStationTotal"
-                    @resetTotal="resetStationTotal"
-                    @startAlarm="startAlarm"
-                    @stopAlarm="stopAlarm"
-                    @saveLoadDrop="saveLoadDrop"
-                    @acknowledge="AcknowledgeStationIncidence"
+                <!-- <component :is="AfamIV" :sn="1" @emitTotal="getStationTotal" />
+                <component :is="AfamV" :sn="2" @emitTotal="getStationTotal" /> -->
+                <component v-for="(station, n) in stationComponents" :is="station" :sn="n+1" 
+                    @emitTotal="getStationTotal" @resetTotal="resetStationTotal" 
+                    @startAlarm="startAlarm" @stopAlarm="stopAlarm"
+                    @saveLoadDrop="saveLoadDrop" @acknowledge="AcknowledgeStationIncidence"
                 />
-                <tr>
-                    <td colspan="6" class="border border-gray-300 p-2 text-right font-bold">Total:</td>
-                    <td class="border border-gray-300 p-2 font-bold">{{ total.toLocaleString('en-US') }}MW</td>
-                </tr>
+                Total: {{ total.toLocaleString('en-US') }}MW
             </tbody>
         </table>
     </div>
 </template>
 
+
 <script setup lang="ts">
     import { ref, computed } from 'vue';
-    // import TheWelcome from '../components/TheWelcome.vue'
-    // import AfamIV from '@/components/AfamIV.vue';
-    // import AfamV from '@/components/AfamV.vue';
-    // import AfamVI from '@/components/AfamVI.vue';
+    import TheWelcome from '../components/TheWelcome.vue'
+    import AfamIV from '@/components/AfamIV.vue';
+    import AfamV from '@/components/AfamV.vue';
+    import AfamVI from '@/components/AfamVI.vue';
     import stationComponents from '@/stationComponents';
-    import stationStores from '@/stationStores'
     import axios from "axios";
     import { type saveDropData, type acknowledgeStationData } from "@/types";
     import { inStorage, storage, putInStorage } from '@/localStorage';
     import { settings } from '@/enums';
     import { retrieveLoadDropsFromStorage } from '@/helper';
-    import StationRow from '@/components/StationRow.vue';
-
-    // console.log('stores', stationStores);
 
     const stationsTotal= ref<Record<string, any>>({});
     const alarm = ref<HTMLAudioElement | null>(null);
@@ -70,6 +61,14 @@
     }
 
     function saveLoadDrop(data:saveDropData) {
+        // console.log('save');
+        // const data = {
+        //     "powerStationId" : 'alaoji', 
+        //     "load": 400, 
+        //     "percentage": 20, 
+        //     "timeOfDrop": new Date().toISOString(),
+        //     "calType": "average-power"
+        // }
         data.calType = (inStorage(settings.LoadDropOption)) ? String(storage(settings.LoadDropOption)) : String(import.meta.env.VITE_DB_CAL_TYPE);
         const url = `${import.meta.env.VITE_DB_URL}load_drop/save`;
         axios.post(url, data)
@@ -83,12 +82,17 @@
     }
 
     function storeLoadDropInStorage(data:saveDropData) {
+        // console.log('storing load drop in storage');
         let loadDrops = (inStorage(settings.LoadDropsData)) ? retrieveLoadDropsFromStorage() : [];
         loadDrops.push(data);
         putInStorage(settings.LoadDropsData, JSON.stringify(loadDrops));
     }
 
     function AcknowledgeStationIncidence(data: acknowledgeStationData) {
+        // const data = {
+        //     "identifier" : "gbarain",  
+        //     "acknowledgedAt": "2024-01-10 12:17:03"
+        // }
         const url = `${import.meta.env.VITE_DB_URL}load_drop/acknowledge_station`;
         axios.post(url, data)
         .then((res) => {
@@ -100,6 +104,7 @@
     }
 
     function startAlarm() {
+        // console.log('alarm started');
         if (alarm.value) {
             alarm.value.play();
         }
@@ -113,6 +118,8 @@
     };
 
     const getStationTotal = (id: string, total: any) => {
+        // console.log('id: ', id);
+        // console.log('total', total);
         stationsTotal.value[id] = total;
     }
 
@@ -121,7 +128,10 @@
     }
 
     const total = computed(() => {
+        // console.log()
         if(stationsTotal.value != undefined) {
+            // console.log(Object.values(stationsTotal.value));
+            // return 0
             let t = Object.values(stationsTotal.value).reduce((total, curr) => total + parseFloat(curr.toString()), 0);
             return numberWithCommas(t.toFixed(2));
         }

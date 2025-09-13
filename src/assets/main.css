@@ -1,4 +1,5 @@
-@import './base.css';
+/* @import './base.css'; */
+@import '../style.css';
 
 .content-container {
   display:flex; 

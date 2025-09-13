@@ -28,3 +28,8 @@ export const getDate = (adjustOffset:boolean = true) => {
     let adjustedDate = new Date(date.getTime() + adjustedOffset * 60 * 1000);
     return adjustedDate;
 }
+
+export const toNumber = (val: string | number | null | undefined): number => {
+    if (val === null || val === undefined || val === '' || val === '-') return NaN
+    return typeof val === 'number' ? val : parseFloat(val)
+  }
