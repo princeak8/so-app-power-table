@@ -1,5 +1,6 @@
 import { stationId } from '@/enums';
 
+import { afamIIIStore } from './afamIIIStore';
 import {afamIVStore} from "@/stores/afamIVStore";
 import { afamVStore } from "@/stores/afamVStore";
 import { afamVIStore } from "./afamVIStore";
@@ -23,6 +24,7 @@ import { okpaiStore } from "./okpaiStore";
 import { olorunsogoNippStore } from "./olorunsogoNippStore";
 import { omokuStore } from "./omokuStore";
 import { omotoshoNippStore } from "./omotoshoNippStore";
+import { omotoshoStore } from './omotoshoStore';
 import { parasEnergyStore } from "./parasEnergyStore";
 import { riversIppStore } from "./riversIppStore";
 import { shiroroStore } from "./shiroroStore";
@@ -39,6 +41,7 @@ import { useOlorunsogo2Store } from "./useOlorunsogo2Store";
 
 const stores = () =>  {
     return {
+        [stationId.AfamIII] : afamIIIStore(),
         [stationId.AfamIV] : afamIVStore(),
         [stationId.AfamV] : afamVStore(),
         [stationId.AfamVI] : afamVIStore(),
@@ -60,6 +63,7 @@ const stores = () =>  {
         [stationId.OlorunsogoLines] : olorunsogoNippStore(),
         [stationId.Omoku] : omokuStore(),
         [stationId.OmotoshoNipp] : omotoshoNippStore(),
+        [stationId.OmotoshoGas] : omotoshoStore(),
         [stationId.ParasEnergy] : parasEnergyStore(),
         [stationId.RiversIpp] : riversIppStore(),
         [stationId.SapeleNipp] : sapeleNippStore(),

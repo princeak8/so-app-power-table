@@ -49,9 +49,9 @@ import { inStorage, putInStorage, storage } from './localStorage';
               // console.log(formattedData?.id);
               // if(formattedData?.id=='dadinKowaGs') console.log('formatted data', formattedData);
               if(fMsg != null) {
-                  // if(formattedData?.id=='dadinKowaGs') console.log('formatted data', formattedData);
+                  // if(fMsg?.id=='afamIIIPs') console.log('formatted data', fMsg);
                   const station = (fMsg.id) ? stationStore(fMsg.id) : stationStore(fMsg.name);
-                  // if(formattedData?.id=='dadinKowaGs') console.log('dadinkowa station', station);
+                  // if(fMsg?.id=='afamIIIPs') console.log('AfamIII station', station);
                   
                   if(station != undefined) {
                     // if(formattedData?.id=='dadinKowaGs') console.log('setting station');

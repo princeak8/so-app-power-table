@@ -1,28 +1,44 @@
 <template>
     <!-- <TheWelcome /> -->
-    <div class="content-container" style="border: none; display: relative;">
+    <div class="border-0 relative">
         <div id="header">
             <div class="heading">
-                <h1>REPORTS</h1>
+                <h1 class="font text-8xl font-extrabold text-red-500">REPORTS</h1>
             </div>
 
             <div>
-                <div style="margin-bottom: 3%; margin-top: 3%; display: flex; flex-direction: row; justify-content: space-between;">
+                <div class="mb-6 mt-6 flex flex-row justify-between">
                     <h2>{{ title }}</h2>
                     <button type="button" @click="reload">
                         <span v-if="!reloading">RELOAD</span>
                         <img v-if="reloading" src="./reload.gif" width="50" height="30" />
                     </button>
                 </div>
-                <div style="display: flex; flex-direction: row;">
-                    <p>Start Date:<input type="date" v-model="startDate" :max="maxStartDate" /></p>
-                    <p style="margin-left: 5%; margin-right: 2%;">End Date: <input type="date" v-model="endDate" :max="maxEndDate" :min="minEndDate" :disabled="!endDateActive" /></p>
-                    <button type="button" @click="search"> Search </button>
+                <div class="flex flex-row gap-4 mb-4">
+                    <!-- <p>Start Date:<input type="date" v-model="startDate" :max="maxStartDate" class="border-2 rounded" /></p> -->
+                    <!-- <p class="ml-[5%] mr-[2%]">End Date: <input type="date" v-model="endDate" :max="maxEndDate" :min="minEndDate" :disabled="!endDateActive" /></p> -->
+                    <div class="border-2 border-blue-500 p-2 rounded-lg bg-blue-50 min-w-fit">
+                        <label class="block text-xs font-medium text-blue-700 mb-1">Start Date</label>
+                        <input type="date" v-model="startDate" :max="maxStartDate" class="bg-transparent border-0 focus:outline-none text-sm" />
+                    </div>
+                    <div class="border-2 border-blue-500 p-2 rounded-lg bg-blue-50 min-w-fit" :class="{'opacity-50': !endDateActive}">
+                        <label class="block text-xs font-medium text-blue-700 mb-1">End Date</label>
+                        <input type="date" v-model="endDate" :max="maxEndDate" :min="minEndDate" :disabled="!endDateActive" class="bg-transparent border-0 focus:outline-none text-sm disabled:text-gray-400" />
+                    </div>
+                    <!-- <button type="button" @click="search" class="!rounded-md !py-2 !px-3 !border-2 !text-red-600"> Search </button>
                     <button type="button" @click="download"> Download </button>
-                    <button type="button" @click="clear"> Clear </button>           
+                    <button type="button" @click="clear"> Clear </button> -->
+
+                    <button type="button" @click="search" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"> Search </button>
+                    <button type="button" @click="download" class="bg-green-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-all"> Download </button>
+                    <button type="button" @click="clear" class="bg-red-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-all"> Clear </button>
+                    
+                    
+
                 </div>
-                <input type="text" v-model="nameFilter" placeholder="filter name" style="margin-top: 0.5rem; margin-bottom: 0.5rem; height: 2rem;" />
-                
+                <div style="margin-top: 24px; margin-bottom: 24px;">
+    <input type="text" v-model="nameFilter" placeholder="Filter name..." class="w-[30%] px-4 py-2 border-2 border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" />
+</div>
             </div>
         </div>
         <div class="content">
@@ -33,11 +49,16 @@
 
 <style scoped>
     .table-column {
-        text-align: center; padding-top: 1em; padding-bottom: 1em;
+        text-align: center; 
+        padding-top: 1em; 
+        padding-bottom: 1em;
     }
-    .button {
-        font-size: 1em; height: 2em; border-radius: 0.5em; 
-    }
+    
+    /* .button {
+        font-size: 1em; 
+        height: 2em; 
+        border-radius: 0.5em; 
+    } */
 
     /* The sticky class is added to the header with JS when it reaches its scroll position */
     .sticky {
@@ -50,7 +71,6 @@
         padding-top: 102px;
     }
 </style>
-
 
 <script setup lang="ts">
     import { ref, onBeforeMount, watch, onMounted, computed } from 'vue';
@@ -193,6 +213,4 @@
     onMounted(() => {
         //
     })
-
-
 </script>

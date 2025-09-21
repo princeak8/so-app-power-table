@@ -1,3 +1,4 @@
+import { afamIIIStore } from './stores/afamIIIStore';
 import { afamIVStore } from './stores/afamIVStore';
 import { afamVStore } from './stores/afamVStore';
 import { afamVIStore } from './stores/afamVIStore';
@@ -31,13 +32,14 @@ import { transamadiStore } from './stores/transamadiStore';
 import { zungeruStore } from './stores/zungeruStore';
 
 const stations = [
-    { name: "AFAM IV", store: afamIVStore, showDetails: false },
-    { name: "AFAM V", store: afamVStore, showDetails: false },
-    { name: "AFAM VI", store: afamVIStore, showDetails: false },
+    { name: "AFAM III", store: afamIIIStore, showDetails: true },
+    { name: "AFAM IV", store: afamIVStore, showDetails: true },
+    { name: "AFAM V", store: afamVStore, showDetails: true },
+    { name: "AFAM VI", store: afamVIStore, showDetails: true },
     { name: "ALAOJI", store: alaojiStore, showDetails: false },
     { name: "AZURA", store: azuraStore, showDetails: false },
     { name: "DADINKOWA", store: dadinkowaStore, showDetails: false },
-    { name: "DELTA 2", store: delta2Store, showDetails: false },
+    { name: "DELTA 2", store: delta2Store, showDetails: true },
     { name: "DELTA 3", store: delta3Store, showDetails: true },
     { name: "DELTA 4", store: delta4Store, showDetails: true },
     { name: "EGBIN", store: egbinStore, showDetails: true },

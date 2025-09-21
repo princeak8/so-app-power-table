@@ -7,18 +7,18 @@ import { stationId, settings } from '@/enums';
 import { values, getAverage } from '@/utilities';
 import { inStorage, storage } from '@/localStorage';
 
-const storeId = 'omotoshoGas';
+const storeId = 'afamIII';
 
-export const omotoshoStore = defineStore(storeId, () => {
-    const stationStore = ref(initializeStation(stationId.OmotoshoGas));
+export const afamIIIStore = defineStore(storeId, () => {
+  const afamIII = ref(initializeStation(stationId.AfamIII));
 
-    const { VITE_POWER_SAMPLE_SIZE } = import.meta.env;
+  const { VITE_POWER_SAMPLE_SIZE } = import.meta.env;
 
     const connected = ref(false);
     const connectionLost = ref(false);
     const lastConnectedTime = ref(); 
 
-    const mw = ref(); 
+    const mw = ref();
     const mx = ref();
     const kv = ref();
 
@@ -36,6 +36,7 @@ export const omotoshoStore = defineStore(storeId, () => {
     watch(() => powerSampleArr.value.length, () => {
         let arr = powerSampleArr.value;
         let SampleSize = (inStorage(settings.SampleSize)) ? storage(settings.SampleSize) : VITE_POWER_SAMPLE_SIZE;
+        // console.log('sample array:', arr.length);
         if(arr.length >= SampleSize) {
             powerTarget.value = getAverage(arr);
             referencePower.value = powerTarget.value;
@@ -45,19 +46,20 @@ export const omotoshoStore = defineStore(storeId, () => {
     })
 
     function set (data: stationType) {
-        // console.log("Omotosho Gas:", data);
-        stationStore.value = {...data};
+        // console.log("AfamIII:", data);
+        afamIII.value = {...data};
         mw.value = getPower(data.sections, true);
         mx.value = getMvar(data.sections, true);
         kv.value = getVoltage(data.sections);
 
-        // checking for sudden power drop below the threshold
         let loadDropOption = localStorage.getItem(settings.LoadDropOption);
+        // console.log("Load Drop Option:", loadDropOption);
         let declaredPower = localStorage.getItem(storeId);
 
         prevPower.value = currPower.value;
         currPower.value = mw.value.pwr;
 
+        // console.log(`${loadDropOption} && ${loadDropOption}==${settings.DeclaredPower} && ${declaredPower}`);
         if(loadDropOption && loadDropOption == settings.DeclaredPower && declaredPower) {
             powerTarget.value = parseFloat(declaredPower);
             referencePower.value = powerTarget.value;
@@ -66,12 +68,13 @@ export const omotoshoStore = defineStore(storeId, () => {
         }
         // checking for sudden power drop below the threshold
         let drop = checkPowerDrop(powerTarget.value, parseFloat(mw.value.pwr), prevPower.value, storeId);
+        // console.log('power drop target:', powerTarget.value);
         if(drop) powerDrop.value = drop;
         if(drop?.status) {
             powerSampleArr.value = []; // clear the sample array if load drop is flagged
             powerTarget.value = 0;
         }
-
+        
         connect();
         lastConnectedTime.value = Math.round(new Date().getTime() / 1000);
     }
@@ -85,6 +88,7 @@ export const omotoshoStore = defineStore(storeId, () => {
         connected.value = true;
     }
 
+    //Checks that the last time since the station's value was updated has not exceeded the max update time
     function checkConnection () {
         if(lastConnectedTime.value != undefined) {
             if(Math.abs(currentTime() - lastConnectedTime.value) >= import.meta.env.VITE_MAX_NO_UPDATE_TIME) disconnected();
@@ -97,7 +101,7 @@ export const omotoshoStore = defineStore(storeId, () => {
         powerDrop.value = {drop: 0, status: false, percentage: 0};
     }
 
-    const station = computed(() => stationStore.value)
+    const station = computed(() => afamIII.value)
     const isConnected = computed(() => connected.value);
     const isConnectionLost = computed(() => connectionLost.value);
     const lastConnected = computed(() => lastConnectedTime.value);
@@ -109,7 +113,8 @@ export const omotoshoStore = defineStore(storeId, () => {
         return (lastConnectedTime.value != undefined) ? Math.abs((currentTime() - lastConnectedTime.value)) : false;
     })
 
-  return { station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad, prevLoad,
-                set, disconnected, connect, checkConnection, acknowledgePowerDrop 
-            }
+  return { 
+            station, isConnected, isConnectionLost, lastConnected, powerDrop, vals, targetPower, referenceLoad, prevLoad,
+            set, disconnected, connect, checkConnection, acknowledgePowerDrop 
+        }
 })

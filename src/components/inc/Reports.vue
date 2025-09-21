@@ -12,14 +12,14 @@
             </thead>
             <tbody style="height:50px;">
                 <tr v-if="loadDrops != undefined && loadDrops.length > 0" v-for="(loadDrop, i) in loadDrops">
-                    <td class="center">{{ i+1 }}</td>
-                    <td class="center">{{ loadDrop.station.name }}</td>
-                    <td class="center">{{ loadDrop.referenceLoad }}MW</td>
-                    <td class="center">{{ (loadDrop.referenceLoad - loadDrop.load).toFixed(2) }}MW({{ loadDrop.refLoadPercentage }}%)</td>
-                    <td class="center">{{ loadDrop.load }}MW</td>
+                    <td class="center border border-gray-300 p-2">{{ i+1 }}</td>
+                    <td class="center border border-gray-300 p-2">{{ loadDrop.station.name }}</td>
+                    <td class="center border border-gray-300 p-2">{{ loadDrop.referenceLoad }}MW</td>
+                    <td class="center border border-gray-300 p-2">{{ (loadDrop.referenceLoad - loadDrop.load).toFixed(2) }}MW({{ loadDrop.refLoadPercentage }}%)</td>
+                    <td class="center border border-gray-300 p-2">{{ loadDrop.load }}MW</td>
                     <!-- td class="center"{{ loadDrop.previousLoad }}MW({{ loadDrop.prevLoadPercentage }}%)</td> -->
-                    <td class="center">{{ loadDrop.calculationType }}</td>
-                    <td class="center">{{ loadDrop.timeOfDrop }}</td>
+                    <td class="center border border-gray-300 p-2">{{ loadDrop.calculationType }}</td>
+                    <td class="center border border-gray-300 p-2">{{ loadDrop.timeOfDrop }}</td>
                 </tr>
                 <tr v-else> No load drops found </tr>
             </tbody>

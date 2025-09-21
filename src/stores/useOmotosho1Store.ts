@@ -17,6 +17,7 @@ export const useOmotosho1Store = defineStore('useOmotosho1', () => {
     const kv = ref();
 
     function set (data: stationType) {
+        console.log("Omotosho1 Store:", data);
         stationStore.value = {...data};
         mw.value = getPower(data.sections, true);
         mx.value = getMvar(data.sections, true);

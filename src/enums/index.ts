@@ -1,7 +1,8 @@
 export enum stationId {
+    AfamIII = 'afamIIIPs',
     AfamIV = 'afamIv_vPs',
     AfamV = 'afamVPs',
-    AfamVI = 'afamViTs',
+    AfamVI = 'afamVIPs',
     Alaoji = 'alaoji',
     Azura = 'azuraIppPs',
     Dadinkowa = 'dadinKowaGs',
