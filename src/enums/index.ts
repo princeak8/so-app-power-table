@@ -5,7 +5,7 @@ export enum stationId {
     AfamVI = 'afamVIPs',
     Alaoji = 'alaoji',
     Azura = 'azuraIppPs',
-    Dadinkowa = 'dadinKowaGs',
+    Dadinkowa = 'dadinkowa',
     Delta2 = 'delta2',
     Delta3 = 'delta3',
     Delta4 = 'deltaGs',

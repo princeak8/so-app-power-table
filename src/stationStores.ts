@@ -38,7 +38,7 @@ const stations = [
     { name: "AFAM VI", store: afamVIStore, showDetails: true },
     { name: "ALAOJI", store: alaojiStore, showDetails: false },
     { name: "AZURA", store: azuraStore, showDetails: false },
-    { name: "DADINKOWA", store: dadinkowaStore, showDetails: false },
+    { name: "DADINKOWA", store: dadinkowaStore, showDetails: true },
     { name: "DELTA 2", store: delta2Store, showDetails: true },
     { name: "DELTA 3", store: delta3Store, showDetails: true },
     { name: "DELTA 4", store: delta4Store, showDetails: true },
