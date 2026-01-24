@@ -95,3 +95,9 @@ export interface loadDropData {
     prevLoadPercentage: string;
     refLoadPercentage: string;
 }
+
+export interface PowerStation {
+    id: number;
+    identifier: string;
+    name: string;
+}

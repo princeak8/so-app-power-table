@@ -48,8 +48,8 @@ const stations = [
     { name: "GBARAIN", store: gbarainStore, showDetails: false },
     { name: "IBOM", store: ibomStore, showDetails: false },
     { name: "IHOVBOR", store: ihovborStore, showDetails: false },
-    { name: "JEBBA", store: jebbaStore, showDetails: false },
-    { name: "KAINJI", store: kainjiStore, showDetails: false },
+    { name: "JEBBA", store: jebbaStore, showDetails: true },
+    { name: "KAINJI", store: kainjiStore, showDetails: true },
 
     { name: "Okpai", store: okpaiStore, showDetails: true },
     { name: "OLORUNSOGO", store: olorunsogoStore, showDetails: false },
@@ -64,7 +64,7 @@ const stations = [
     { name: "SHIRORO", store: shiroroStore, showDetails: true },
     { name: "TAOPEX", store: taopexStore, showDetails: false },
     { name: "TRANS-AMADI", store: transamadiStore, showDetails: false },
-    { name: "ZUNGERU", store: zungeruStore, showDetails: false },
+    { name: "ZUNGERU", store: zungeruStore, showDetails: true },
   ];
 
   export default stations
