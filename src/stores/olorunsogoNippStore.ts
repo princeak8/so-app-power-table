@@ -21,6 +21,7 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
     const mw = ref(); 
     const mx = ref();
     const kv = ref();
+    const t = ref();
 
     const power = ref();
     const mvar = ref();
@@ -51,6 +52,7 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
         mw.value = getPower(data.sections);
         mx.value = getMvar(data.sections);
         kv.value = getVoltage(data.sections);
+        t.value = data.t;
 
         connect();
         lastConnectedTime.value = Math.round(new Date().getTime() / 1000);
@@ -103,8 +105,9 @@ export const olorunsogoNippStore = defineStore(storeId, () => {
             power = {pwr: pwr.toFixed(2), status: (power.status && olorunsogoMw.status)};
             mvar = {pwr: mxPwr.toFixed(2), status: (mvar.status && olorunsogoMx.status)};
         }
-
-        return values(power, mvar, kv.value);
+        let time = (t.value) ? t.value : olorunsogoVals.value.t;
+        let val = values(power, mvar, kv.value);
+        return {...val, t: time};
     })
 
     watch(() => vals.value, (val) => {

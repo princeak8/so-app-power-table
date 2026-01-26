@@ -16,12 +16,14 @@ export const useEkimStore = defineStore('useEkim', () => {
     const mw = ref();
     const mx = ref();
     const kv = ref();
+    const t = ref();
 
     function set (data: stationType) {
         stationStore.value = {...data};
         mw.value = getPower(data.sections, true);
         mx.value = getMvar(data.sections, true);
         kv.value = getVoltage(data.sections);
+        t.value = data.t;
 
         connect();
         lastConnectedTime.value = Math.round(new Date().getTime() / 1000);
@@ -49,7 +51,7 @@ export const useEkimStore = defineStore('useEkim', () => {
     const isConnectionLost = computed(() => connectionLost.value);
     const lastConnected = computed(() => lastConnectedTime.value);
     const vals = computed((): singleStoreValsType => {
-        return {power: mw.value, voltage: kv.value, mvar: mx.value} 
+        return {power: mw.value, voltage: kv.value, mvar: mx.value, t: t.value} 
     });
     const timeSinceLastConnection = computed(() => {
         return (lastConnectedTime.value != undefined) ? Math.abs((currentTime() - lastConnectedTime.value)) : false;

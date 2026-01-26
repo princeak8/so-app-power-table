@@ -109,8 +109,9 @@ export const ibomStore = defineStore(storeId, () => {
     
     const vals = computed(() => {
         // console.log('merged vals', mergedVals);
-        let {power, mvar, voltage} = mergedVals.value;
-        return values(power, mvar, voltage);
+        let {power, mvar, voltage, t} = mergedVals.value;
+        let val = values(power, mvar, voltage);
+        return { ...val, t};
     });
 
     watch(() => vals.value, (val) => {

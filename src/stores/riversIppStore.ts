@@ -21,6 +21,7 @@ export const riversIppStore = defineStore(storeId, () => {
     const mw = ref(); 
     const mx = ref();
     const kv = ref();
+    const t = ref();
 
     const powerSampleArr = ref<string[]>([]);
     const powerTarget = ref(0);
@@ -49,6 +50,7 @@ export const riversIppStore = defineStore(storeId, () => {
         mw.value = getPower(data.sections, true);
         mx.value = getMvar(data.sections, true);
         kv.value = getVoltage(data.sections);
+        t.value = data.t;
 
         // checking for sudden power drop below the threshold
         let loadDropOption = localStorage.getItem(settings.LoadDropOption);
@@ -100,7 +102,11 @@ export const riversIppStore = defineStore(storeId, () => {
     const isConnected = computed(() => connected.value);
     const isConnectionLost = computed(() => connectionLost.value);
     const lastConnected = computed(() => lastConnectedTime.value);
-    const vals = computed(() => values(mw.value, mx.value, kv.value));
+    const vals = computed(() => {
+        let val = values(mw.value, mx.value, kv.value);
+        let time = t.value;
+        return { ...val, t: time};
+    });
     const targetPower = computed(() => powerTarget.value);
     const referenceLoad = computed(() => referencePower.value);
     const prevLoad = computed(() => prevPower.value);

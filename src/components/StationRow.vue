@@ -42,7 +42,7 @@
   import { inStorage, storage } from "@/localStorage";
   import { ignore, lift } from "@/helper";
   import { settings } from "@/enums";
-  import { getDate } from "@/utilities";
+  import { getDate, today } from "@/utilities";
   import StationModal from "./modals/StationModal.vue";
   
   // 🟢 Props
@@ -91,15 +91,17 @@
     (powerDropped) => {
       if (powerDropped.status) {
         if (powerDropIgnored.value == false) emits("startAlarm");
+        console.log("time of drop:", today()+' '+vals.value.t);
         const data = {
           powerStationId: station.value.id,
           load: parseFloat(vals.value.mw),
           previousLoad:
             prevLoad.value == null ? 0 : parseFloat(prevLoad.value),
           referenceLoad: referenceLoad.value,
-          timeOfDrop: getDate().toISOString(),
+          timeOfDrop: today()+' '+vals.value.t, // getDate().toISOString(),
           calType: localStorage.getItem(settings.LoadDropOption),
         };
+        console.log("time of drop:", today()+' '+vals.value.t);
         emits("saveLoadDrop", data);
       }
     }

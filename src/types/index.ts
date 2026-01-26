@@ -61,6 +61,7 @@ export interface singleStoreValsType {
     power: powerValObjType;
     mvar: mvarValObjType;
     voltage: voltageValObjType;
+    t: string;
 }
 
 export interface saveDropData {

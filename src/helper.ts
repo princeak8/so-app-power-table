@@ -119,10 +119,11 @@ export const mergeVals = (...vals: singleStoreValsType[]) => {
     let totalPower = {pwr: '0', status: false};
     let totalMvar = {pwr: '0', status: false};
     let totalVoltage = {value: 0, status: false};
+    let time = '';
     if(vals.length > 0) {
         vals.forEach((storeVals) => {
             // console.log('stroe values', storeVals);
-            let {power, mvar, voltage} = storeVals;
+            let {power, mvar, voltage, t} = storeVals;
             if(power != undefined) {
                 if(power.status) {
                     let totalMw = parseFloat(totalPower.pwr);
@@ -145,9 +146,10 @@ export const mergeVals = (...vals: singleStoreValsType[]) => {
                 if(voltage.status) if(totalVoltage.value < voltage.value) totalVoltage.value = voltage.value;
                 if(voltage.status) totalVoltage.status = true;
             }
+            if(time == '' && t) time = t;
         })
     }
-    return {power: totalPower, mvar: totalMvar, voltage: totalVoltage};
+    return {power: totalPower, mvar: totalMvar, voltage: totalVoltage, t: time};
 }
 
 // ignore power drop alerts, the station will stop being alerted on power drop

@@ -21,6 +21,7 @@ export const sapeleSteamStore = defineStore(storeId, () => {
     const mw = ref(); 
     const mx = ref();
     const kv = ref();
+    const t = ref();
 
     const powerSampleArr = ref<string[]>([]);
     const powerTarget = ref(0);
@@ -53,6 +54,7 @@ export const sapeleSteamStore = defineStore(storeId, () => {
         mx.value = getMvar(data.sections, true);
         // console.log('set Sapele6');
         kv.value = getVoltage(data.sections);
+        t.value = data.t;
 
         // console.log('set Sapele3');
 
@@ -109,7 +111,11 @@ export const sapeleSteamStore = defineStore(storeId, () => {
     const isConnected = computed(() => connected.value);
     const isConnectionLost = computed(() => connectionLost.value);
     const lastConnected = computed(() => lastConnectedTime.value);
-    const vals = computed(() => values(mw.value, mx.value, kv.value));
+    const vals = computed(() => {
+        let val = values(mw.value, mx.value, kv.value);
+        let time = t.value;
+        return { ...val, t: time};
+    });
     const targetPower = computed(() => powerTarget.value);
     const referenceLoad = computed(() => referencePower.value);
     const prevLoad = computed(() => prevPower.value);

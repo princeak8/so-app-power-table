@@ -29,6 +29,10 @@ export const getDate = (adjustOffset:boolean = true) => {
     return adjustedDate;
 }
 
+export const today = () => {
+    return new Date().toISOString().split('T')[0];
+}
+
 export const toNumber = (val: string | number | null | undefined): number => {
     if (val === null || val === undefined || val === '' || val === '-') return NaN
     return typeof val === 'number' ? val : parseFloat(val)
