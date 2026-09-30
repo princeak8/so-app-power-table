@@ -34,9 +34,11 @@ import { inStorage, putInStorage, storage } from './localStorage';
       ws.onmessage = async (msg) => {
           try{
               const fMsg = JSON.parse(msg.data);
+              console.log('fmsg:', fMsg);
               // if(fMsg.id=='odukpaniNippPs') console.log('fmsg:', fMsg);
               connected.value = true;
               if(fMsg.id && fMsg.nc) {
+                console.log("disconnected", fMsg);
                 let ncStation = stationStore(fMsg.id);
                 ncStation.disconnected();
               }
@@ -49,6 +51,8 @@ import { inStorage, putInStorage, storage } from './localStorage';
               // console.log(formattedData?.id);
               // if(formattedData?.id=='dadinKowaGs') console.log('formatted data', formattedData);
               if(fMsg != null) {
+                console.log('id', fMsg.id ?? fMsg.name);  
+                console.log('formatted data', fMsg);
                   // if(fMsg?.id=='afamIIIPs') console.log('formatted data', fMsg);
                   const station = (fMsg.id) ? stationStore(fMsg.id) : stationStore(fMsg.name);
                   // if(fMsg?.id=='dadinkowa') console.log('DadinKowa station', station);
@@ -59,9 +63,11 @@ import { inStorage, putInStorage, storage } from './localStorage';
                   }
                   MessageReceivedTime = Math.round(new Date().getTime() / 1000);
                   checkConnections();
+              }else{
+                console.log("its null", fMsg);
               }
           }catch(error){
-              //
+              console.log("error", error);
           }
       }
 

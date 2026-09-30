@@ -91,17 +91,17 @@
     (powerDropped) => {
       if (powerDropped.status) {
         if (powerDropIgnored.value == false) emits("startAlarm");
-        console.log("time of drop:", today()+' '+vals.value.t);
+        console.log("time of drop:", vals.value.t ? today()+' '+vals.value.t : getDate().toISOString());
         const data = {
           powerStationId: station.value.id,
           load: parseFloat(vals.value.mw),
           previousLoad:
             prevLoad.value == null ? 0 : parseFloat(prevLoad.value),
           referenceLoad: referenceLoad.value,
-          timeOfDrop: today()+' '+vals.value.t, // getDate().toISOString(),
+          timeOfDrop: vals.value.t ? today()+' '+vals.value.t : getDate().toISOString(),
           calType: localStorage.getItem(settings.LoadDropOption),
         };
-        console.log("time of drop:", today()+' '+vals.value.t);
+        console.log("time of drop:", vals.value.t ? today()+' '+vals.value.t : getDate().toISOString());
         emits("saveLoadDrop", data);
       }
     }

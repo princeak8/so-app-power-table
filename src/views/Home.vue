@@ -10,9 +10,9 @@
 
         <table class="w-full border-collapse border border-gray-300 font-bold">
             <thead>
-                <tr class="bg-black">
+                <tr class="bg-black text-white font-extrabold">
                     <th class="border border-gray-300 p-2">S/N</th>
-                    <th class="border border-gray-300 text-red-800 p-2">Station</th>
+                    <th class="border border-gray-300 p-2">Station</th>
                     <th class="border border-gray-300 p-2">Power(MW)</th>
                     <th class="border border-gray-300 p-2">REACTIVE POWER (MVar)</th>
                     <th class="border border-gray-300 p-2">VOLTAGE (kV)</th>
