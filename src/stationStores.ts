@@ -16,6 +16,7 @@ import { ibomStore } from './stores/ibomStore';
 import { ihovborStore } from './stores/ihovborStore';
 import { jebbaStore } from './stores/jebbaStore';
 import { kainjiStore } from './stores/kainjiStore';
+import { kashimbilaStore } from './stores/kashimbilaStore';
 import { odukpaniStore } from './stores/odukpaniStore';
 import { okpaiStore } from './stores/okpaiStore';
 import { olorunsogoStore } from './stores/olorunsogoStore';
@@ -51,6 +52,7 @@ const stations = [
     { name: "IHOVBOR", store: ihovborStore, showDetails: false },
     { name: "JEBBA", store: jebbaStore, showDetails: true },
     { name: "KAINJI", store: kainjiStore, showDetails: true },
+    { name: "KASHIMBILA", store: kashimbilaStore, showDetails: true },
     { name: "Odukpani", store: odukpaniStore, showDetails: false },
     { name: "Okpai", store: okpaiStore, showDetails: true },
     { name: "OLORUNSOGO", store: olorunsogoStore, showDetails: true },

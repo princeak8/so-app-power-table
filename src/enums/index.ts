@@ -16,6 +16,7 @@ export enum stationId {
     Ihovbor = 'ihovborNippPs',
     Jebba = 'jebbaPs',
     Kainji = 'kainjiPs',
+    Kashimbila = 'kashimbila',
     Odukpani = 'odukpaniNippPs',
     Okpai = 'okpaiGs',
     Omoku = 'omokuPs1',

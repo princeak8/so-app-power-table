@@ -17,6 +17,7 @@ import { gbarainStore } from "./gbarainStore";
 import { ihovborStore } from "./ihovborStore";
 import { jebbaStore } from "./jebbaStore";
 import { kainjiStore } from "./kainjiStore";
+import { kashimbilaStore } from "./kashimbilaStore";
 import { odukpaniStore } from "./odukpaniStore";
 import { sapeleNippStore } from "./sapeleNippStore";
 import { sapeleSteamStore } from './sapeleSteamStore';
@@ -59,6 +60,7 @@ const stores = () =>  {
         [stationId.Ihovbor] : ihovborStore(),
         [stationId.Jebba] : jebbaStore(),
         [stationId.Kainji] : kainjiStore(),
+        [stationId.Kashimbila] : kashimbilaStore(),
         [stationId.Odukpani] : odukpaniStore(),
         [stationId.Okpai] : okpaiStore(),
         [stationId.OlorunsogoGas] : olorunsogoStore(),
