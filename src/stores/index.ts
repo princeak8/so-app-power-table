@@ -21,6 +21,7 @@ import { odukpaniStore } from "./odukpaniStore";
 import { sapeleNippStore } from "./sapeleNippStore";
 import { sapeleSteamStore } from './sapeleSteamStore';
 import { okpaiStore } from "./okpaiStore";
+import { olorunsogoStore } from "./olorunsogoStore";
 import { olorunsogoNippStore } from "./olorunsogoNippStore";
 import { omokuStore } from "./omokuStore";
 import { omotoshoNippStore } from "./omotoshoNippStore";
@@ -60,6 +61,7 @@ const stores = () =>  {
         [stationId.Kainji] : kainjiStore(),
         [stationId.Odukpani] : odukpaniStore(),
         [stationId.Okpai] : okpaiStore(),
+        [stationId.OlorunsogoGas] : olorunsogoStore(),
         [stationId.OlorunsogoLines] : olorunsogoNippStore(),
         [stationId.Omoku] : omokuStore(),
         [stationId.OmotoshoNipp] : omotoshoNippStore(),

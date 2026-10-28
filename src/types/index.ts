@@ -6,6 +6,8 @@ export interface dataType {
     v?: number | string;
     mvar?: number | string;
     mx?: number | string;
+    pf?: number | string;
+    f?: number | string;
 }
 
 export interface sectionType {
